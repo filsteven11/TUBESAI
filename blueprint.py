@@ -87,45 +87,123 @@ def draw_second_floor(ax, floor_number, room_names=None):
     
     ax.text(width / 2, height + 0.5, f" Floor {floor_number}", ha='center', fontsize=12, weight='bold')
 
+def draw_third_floor(ax, floor_number, room_names=None):
+    """Draw a third floor with 8 classrooms, stairs, lift, and restrooms."""
+    width, height = 12, 6
+    room_width = width / 7.5  # Width of each classroom
+    room_height = height / 2  # Height of each classroom
+
+    ax.add_patch(patches.Rectangle((0, 0), width, height, edgecolor='black', facecolor='none', lw=2))
+
+    stair_width = 1
+    ax.add_patch(patches.Rectangle((0, height / 2), stair_width, 1.5, edgecolor='black', facecolor='lightblue'))  # Left stair
+    ax.add_patch(patches.Rectangle((width - stair_width, height / 2), stair_width, 1.5, edgecolor='black', facecolor='lightblue'))  # Right stair
+    ax.text(0.5, height / 2 + 1.6, 'Stairs', ha='center', fontsize=9, weight='bold')  # Left stair label
+    ax.text(width - 0.5, height / 2 + 1.6, 'Stairs', ha='center', fontsize=9, weight='bold')  # Right stair label
+
+    ax.add_patch(patches.Rectangle((stair_width, height / 2), 2, 1.5, edgecolor='black', facecolor='lightgreen'))  # Lift
+    ax.text(stair_width + 1, height / 2 + 1.6, 'Lift', ha='center', fontsize=9, weight='bold')
+
+    # Draw Classrooms (5 total)
+    for i in range(5):
+        room_name = room_names.get(f'classroom_{i+1}', f'Classroom {i+1}') if room_names else f'Classroom {i+1}'
+        ax.add_patch(patches.Rectangle((stair_width + 2 + i * room_width, height / 2), room_width, room_height, edgecolor='black', facecolor='none'))
+        ax.text(stair_width + 2 + i * room_width + room_width / 2, height / 2 + room_height / 2, room_name, ha='center', va='center', fontsize=10)
+
+    # Add WCs
+    wc_width = 1
+    ax.add_patch(patches.Rectangle((0, 0), wc_width, 1.5, edgecolor='black', facecolor='lightgrey'))
+    ax.text(0.5, 0.75, 'WC', ha='center', fontsize=9, weight='bold')
+
+    ax.add_patch(patches.Rectangle((width - wc_width, 0), wc_width, 1.5, edgecolor='black', facecolor='lightgrey'))
+    ax.text(width - 0.5, 0.75, 'WC', ha='center', fontsize=9, weight='bold')
+
+    # Draw Labs
+    lab_names = ['Lab AI', 'Lab Robotics', 'Lab Multimedia']
+    for i, lab_name in enumerate(lab_names):
+        ax.add_patch(patches.Rectangle((wc_width + i * room_width * 2, 0), room_width * 2, 1.5, edgecolor='black', facecolor='none'))
+        ax.text(wc_width + i * room_width * 2 + room_width, 0.75, lab_name, ha='center', va='center', fontsize=10)
+
+    ax.text(width / 2, height + 0.5, f" Floor {floor_number}", ha='center', fontsize=12, weight='bold')
+
+def draw_fourth_floor(ax, floor_number, room_names=None):
+    """Draw a fourth floor with labs and classrooms."""
+    width, height = 12, 6
+    room_width = width / 7.5  # Width of each classroom
+    room_height = height / 2  # Height of each classroom
+
+    ax.add_patch(patches.Rectangle((0, 0), width, height, edgecolor='black', facecolor='none', lw=2))
+
+    stair_width = 1
+    ax.add_patch(patches.Rectangle((0, height / 2), stair_width, 1.5, edgecolor='black', facecolor='lightblue'))  # Left stair
+    ax.add_patch(patches.Rectangle((width - stair_width, height / 2), stair_width, 1.5, edgecolor='black', facecolor='lightblue'))  # Right stair
+    ax.text(0.5, height / 2 + 1.6, 'Stairs', ha='center', fontsize=9, weight='bold')  # Left stair label
+    ax.text(width - 0.5, height / 2 + 1.6, 'Stairs', ha='center', fontsize=9, weight='bold')  # Right stair label
+
+    ax.add_patch(patches.Rectangle((stair_width, height / 2), 2, 1.5, edgecolor='black', facecolor='lightgreen'))  # Lift
+    ax.text(stair_width + 1, height / 2 + 1.6, 'Lift', ha='center', fontsize=9, weight='bold')
+
+    # Draw Classrooms (5 total)
+    for i in range(5):
+        room_name = room_names.get(f'classroom_{i+1}', f'Classroom {i+1}') if room_names else f'Classroom {i+1}'
+        ax.add_patch(patches.Rectangle((stair_width + 2 + i * room_width, height / 2), room_width, room_height, edgecolor='black', facecolor='none'))
+        ax.text(stair_width + 2 + i * room_width + room_width / 2, height / 2 + room_height / 2, room_name, ha='center', va='center', fontsize=10)
+
+    # Add WCs
+    wc_width = 1
+    ax.add_patch(patches.Rectangle((0, 0), wc_width, 1.5, edgecolor='black', facecolor='lightgrey'))
+    ax.text(0.5, 0.75, 'WC', ha='center', fontsize=9, weight='bold')
+
+    ax.add_patch(patches.Rectangle((width - wc_width, 0), wc_width, 1.5, edgecolor='black', facecolor='lightgrey'))
+    ax.text(width - 0.5, 0.75, 'WC', ha='center', fontsize=9, weight='bold')
+
+    # Draw Labs
+    lab_names = ['Lab Networking', 'Lab IoT', 'Lab Cybersecurity']
+    for i, lab_name in enumerate(lab_names):
+        ax.add_patch(patches.Rectangle((wc_width + i * room_width * 2, 0), room_width * 2, 1.5, edgecolor='black', facecolor='none'))
+        ax.text(wc_width + i * room_width * 2 + room_width, 0.75, lab_name, ha='center', va='center', fontsize=10)
+
+    ax.text(width / 2, height + 0.5, f" Floor {floor_number}", ha='center', fontsize=12, weight='bold')
+
+
 # Function to draw the building with floor switching
 def draw_building_with_switching(room_names=None):
-    """Draw a building with multiple floors and buttons to switch between them."""
     fig, ax = plt.subplots(figsize=(12, 6))
     plt.subplots_adjust(bottom=0.2)
 
-    current_floor = [1]  # Use a list to allow modification in the button callback
+    current_floor = [1]
 
     def update_floor(floor):
-        ax.clear()  # Clear the current axes
+        ax.clear()
         if floor == 1:
             draw_floor(ax, floor_number=1, room_names=room_names)
-        else:
+        elif floor == 2:
             draw_second_floor(ax, floor_number=2, room_names=room_names)
+        elif floor == 3:
+            draw_third_floor(ax, floor_number=3, room_names=room_names)
+        elif floor == 4:
+            draw_fourth_floor(ax, floor_number=4, room_names=room_names)
         ax.set_xlim(-1, 13)
         ax.set_ylim(-1, 7)
-        ax.axis('off')  # Hide axes for a cleaner blueprint look
-        plt.draw()  # Redraw the figure
+        ax.axis('off')
+        plt.draw()
 
-    def switch_to_floor_1(event):
-        current_floor[0] = 1
-        update_floor(current_floor[0])
+    def switch_floor(delta):
+        new_floor = current_floor[0] + delta
+        if 1 <= new_floor <= 4:
+            current_floor[0] = new_floor
+            update_floor(current_floor[0])
 
-    def switch_to_floor_2(event):
-        current_floor[ 0] = 2
-        update_floor(current_floor[0])
+    # Buttons for navigation
+    ax_prev = plt.axes([0.1, 0.05, 0.3, 0.075])
+    ax_next = plt.axes([0.6, 0.05, 0.3, 0.075])
+    btn_prev = Button(ax_prev, 'Previous Floor')
+    btn_next = Button(ax_next, 'Next Floor')
 
-    # Create buttons for switching floors
-    ax_floor_1 = plt.axes([0.1, 0.05, 0.3, 0.075])
-    ax_floor_2 = plt.axes([0.6, 0.05, 0.3, 0.075])
-    btn_floor_1 = Button(ax_floor_1, 'Show Floor 1')
-    btn_floor_2 = Button(ax_floor_2, 'Show Floor 2')
+    btn_prev.on_clicked(lambda event: switch_floor(-1))
+    btn_next.on_clicked(lambda event: switch_floor(1))
 
-    btn_floor_1.on_clicked(switch_to_floor_1)
-    btn_floor_2.on_clicked(switch_to_floor_2)
-
-    # Initial drawing
     update_floor(current_floor[0])
-
     plt.show()
 
 # Define custom room names for the floors
