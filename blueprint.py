@@ -119,12 +119,19 @@ def draw_third_floor(ax, floor_number, room_names=None):
     ax.text(width - 0.5, 0.75, 'WC', ha='center', fontsize=9, weight='bold')
 
     # Draw Labs
-    lab_names = ['Lab AI', 'Lab Robotics', 'Lab Multimedia']
-    for i, lab_name in enumerate(lab_names):
-        ax.add_patch(patches.Rectangle((wc_width + i * room_width * 2, 0), room_width * 2, 1.5, edgecolor='black', facecolor='none'))
-        ax.text(wc_width + i * room_width * 2 + room_width, 0.75, lab_name, ha='center', va='center', fontsize=10)
+    lab_crc = room_names.get('large_room', 'Laboratorium CRC') if room_names else 'Laboratorium CRC'
+    ax.add_patch(patches.Rectangle((wc_width, 0), room_width * 2, height / 4, edgecolor='black', facecolor='none'))
+    ax.text(wc_width + room_width, height / 8, lab_crc, ha='center', va='center', fontsize=10)
 
-    ax.text(width / 2, height + 0.5, f" Floor {floor_number}", ha='center', fontsize=12, weight='bold')
+    lab_olb = room_names.get('floor_3_room_1', 'Laboratorium OLB') if room_names else 'Laboratorium OLB'
+    ax.add_patch(patches.Rectangle((wc_width + room_width * 2, 0), room_width * 2, height / 4, edgecolor='black', facecolor='none'))
+    ax.text(wc_width + 3 * room_width, height / 8, lab_olb, ha='center', va='center', fontsize=10)
+
+    lab_iot = room_names.get('floor_3_room_2', 'Laboratorium IoT') if room_names else 'Laboratorium IoT'
+    ax.add_patch(patches.Rectangle((wc_width + room_width * 4, 0), room_width * 2.25, height / 4, edgecolor='black', facecolor='none'))
+    ax.text(wc_width + 5.125 * room_width, height / 8, lab_iot, ha='center', va='center', fontsize=10)
+
+    ax.text(width / 2, height + 0.5, f"Floor {floor_number}", ha='center', fontsize=12, weight='bold')
 
 def draw_fourth_floor(ax, floor_number, room_names=None):
     """Draw a fourth floor with labs and classrooms."""
@@ -158,14 +165,19 @@ def draw_fourth_floor(ax, floor_number, room_names=None):
     ax.text(width - 0.5, 0.75, 'WC', ha='center', fontsize=9, weight='bold')
 
     # Draw Labs
-    lab_names = ['Lab Networking', 'Lab IoT', 'Lab Cybersecurity']
-    for i, lab_name in enumerate(lab_names):
-        ax.add_patch(patches.Rectangle((wc_width + i * room_width * 2, 0), room_width * 2, 1.5, edgecolor='black', facecolor='none'))
-        ax.text(wc_width + i * room_width * 2 + room_width, 0.75, lab_name, ha='center', va='center', fontsize=10)
+    lab_cyber = room_names.get('large_room', 'Laboratorium Cyber') if room_names else 'Laboratorium Cyber'
+    ax.add_patch(patches.Rectangle((wc_width, 0), room_width * 2, height / 4, edgecolor='black', facecolor='none'))
+    ax.text(wc_width + room_width, height / 8, lab_cyber, ha='center', va='center', fontsize=10)
 
-    ax.text(width / 2, height + 0.5, f" Floor {floor_number}", ha='center', fontsize=12, weight='bold')
+    lab_accounting = room_names.get('floor_4_room_1', 'Laboratorium Akuntansi') if room_names else 'Laboratorium Akuntansi'
+    ax.add_patch(patches.Rectangle((wc_width + room_width * 2, 0), room_width * 2, height / 4, edgecolor='black', facecolor='none'))
+    ax.text(wc_width + 3 * room_width, height / 8, lab_accounting, ha='center', va='center', fontsize=10)
 
+    lab_ml = room_names.get('floor_4_room_2', 'Laboratorium ML') if room_names else 'Laboratorium ML'
+    ax.add_patch(patches.Rectangle((wc_width + room_width * 4, 0), room_width * 2.25, height / 4, edgecolor='black', facecolor='none'))
+    ax.text(wc_width + 5.125 * room_width, height / 8, lab_ml, ha='center', va='center', fontsize=10)
 
+    ax.text(width / 2, height + 0.5, f"Floor {floor_number}", ha='center', fontsize=12, weight='bold')
 # Function to draw the building with floor switching
 def draw_building_with_switching(room_names=None):
     fig, ax = plt.subplots(figsize=(12, 6))
