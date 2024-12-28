@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-from matplotlib.widgets import Button
+from matplotlib.widgets import Button,CheckButtons
 
 def draw_floor(ax, floor_number, room_names=None):
-    """Draw a single floor with rooms, stairs, lift, and entrance. Allow custom room names."""
+    # Draw a single floor with rooms, stairs, lift, and entrance. Allow custom room names.
     width, height = 12, 6
     room_width = width / 3
     F1R0 = height / 2
@@ -24,9 +24,9 @@ def draw_floor(ax, floor_number, room_names=None):
     ax.add_patch(patches.Rectangle((stair_width, height / 2), 2, 1.5, edgecolor='black', facecolor='lightgreen'))
     ax.text(stair_width + 1, height / 2 + 1.6, 'Lift', ha='center', fontsize=9, weight='bold')
 
-    labkom = room_names.get('large_room', 'Laboratorium Mac') if room_names else 'Laboratorium Mac'
+    labmac = room_names.get('large_room', 'Laboratorium Mac') if room_names else 'Laboratorium Mac'
     ax.add_patch(patches.Rectangle((stair_width + 2, height / 2), room_width, F1R0, edgecolor='black', facecolor='none'))
-    ax.text(stair_width + 2 + room_width / 2, height / 2 + F1R0 / 2, labkom, ha='center', va='center', fontsize=10)
+    ax.text(stair_width + 2 + room_width / 2, height / 2 + F1R0 / 2, labmac, ha='center', va='center', fontsize=10)
 
     labsi = room_names.get('floor 1 room 1', 'Laboratorium SI') if room_names else 'Laboratorium SI'
     ax.add_patch(patches.Rectangle((stair_width + 2 + room_width, height / 2), room_width / 2, F1R1, edgecolor='black', facecolor='none'))
@@ -39,7 +39,7 @@ def draw_floor(ax, floor_number, room_names=None):
     ax.text(width / 2, height + 0.5, f" Floor {floor_number}", ha='center', fontsize=12, weight='bold')
 
 def draw_second_floor(ax, floor_number, room_names=None):
-    """Draw a second floor with 8 classrooms, stairs, lift, and restrooms."""
+    # Draw a second floor with 8 classrooms, stairs, lift, and restrooms.
     width, height = 12, 6
     room_width = width / 7.5  # Width of each classroom
     room_height = height / 2  # Height of each classroom
@@ -88,7 +88,7 @@ def draw_second_floor(ax, floor_number, room_names=None):
     ax.text(width / 2, height + 0.5, f" Floor {floor_number}", ha='center', fontsize=12, weight='bold')
 
 def draw_third_floor(ax, floor_number, room_names=None):
-    """Draw a third floor with 8 classrooms, stairs, lift, and restrooms."""
+    # Draw a third floor with 8 classrooms, stairs, lift, and restrooms.
     width, height = 12, 6
     room_width = width / 7.5  # Width of each classroom
     room_height = height / 2  # Height of each classroom
@@ -134,7 +134,7 @@ def draw_third_floor(ax, floor_number, room_names=None):
     ax.text(width / 2, height + 0.5, f"Floor {floor_number}", ha='center', fontsize=12, weight='bold')
 
 def draw_fourth_floor(ax, floor_number, room_names=None):
-    """Draw a fourth floor with labs and classrooms."""
+    # Draw a fourth floor with labs and classrooms.
     width, height = 12, 6
     room_width = width / 7.5  # Width of each classroom
     room_height = height / 2  # Height of each classroom
@@ -178,12 +178,29 @@ def draw_fourth_floor(ax, floor_number, room_names=None):
     ax.text(wc_width + 5.125 * room_width, height / 8, lab_ml, ha='center', va='center', fontsize=10)
 
     ax.text(width / 2, height + 0.5, f"Floor {floor_number}", ha='center', fontsize=12, weight='bold')
-# Function to draw the building with floor switching
+
 def draw_building_with_switching(room_names=None):
     fig, ax = plt.subplots(figsize=(12, 6))
-    plt.subplots_adjust(bottom=0.2)
-
+    plt.subplots_adjust(bottom=0.3)
     current_floor = [1]
+
+    def update_checklist(floor):
+      if floor == 1:
+          # Activate all check buttons for floor 1
+          for i in range(len(checklist.labels)):  # Iterate through all check buttons
+              checklist.set_active(i)  # Activate each button by index
+      elif floor == 2:
+          # Activate all check buttons for floor 2
+          for i in range(len(checklist.labels)): 
+              checklist.set_active(i)
+      elif floor == 3:
+          # Activate all check buttons for floor 3
+          for i in range(len(checklist.labels)):
+              checklist.set_active(i)
+      elif floor == 4:
+          # Activate all check buttons for floor 4
+          for i in range(len(checklist.labels)):
+              checklist.set_active(i) 
 
     def update_floor(floor):
         ax.clear()
@@ -199,6 +216,8 @@ def draw_building_with_switching(room_names=None):
         ax.set_ylim(-1, 7)
         ax.axis('off')
         plt.draw()
+        # Update checklist based on current floor
+        update_checklist(floor)
 
     def switch_floor(delta):
         new_floor = current_floor[0] + delta
@@ -215,10 +234,34 @@ def draw_building_with_switching(room_names=None):
     btn_prev.on_clicked(lambda event: switch_floor(-1))
     btn_next.on_clicked(lambda event: switch_floor(1))
 
+    # Checklists for the floors
+    ax_checklist = plt.axes([0.05, 0.2, 0.3, 0.15])
+    checklist_labels = []
+
+    # Define room names for checklists
+    if current_floor[0] == 1:
+        checklist_labels = ['Laboratorium Mac', 'Laboratorium SI', 'Laboratorium DKV']
+    elif current_floor[0] == 2:
+        checklist_labels = [
+            'Laboratorium Basis Data', 'Laboratorium Elektro',
+            'Classroom 201', 'Classroom 202', 'Classroom 203', 'Classroom 204', 'Classroom 205'
+        ]
+    elif current_floor[0] == 3:
+        checklist_labels = [
+            'Laboratorium CRC', 'Laboratorium OLB', 'Laboratorium IoT',
+            'Classroom 301', 'Classroom 302', 'Classroom 303', 'Classroom 304', 'Classroom 305'
+        ]
+    elif current_floor[0] == 4:
+        checklist_labels = [
+            'Laboratorium Cyber', 'Laboratorium Akuntansi', 'Laboratorium ML',
+            'Classroom 401', 'Classroom 402', 'Classroom 403', 'Classroom 404', 'Classroom 405'
+        ]
+    
+    checklist = CheckButtons(ax_checklist, checklist_labels, [False] * len(checklist_labels))
+    
     update_floor(current_floor[0])
     plt.show()
 
-# Define custom room names for the floors
 room_names = {
     'large_room': 'Laboratorium Mac',
     'floor 1 room 1': 'Laboratorium SI',
@@ -249,5 +292,5 @@ room_names = {
     'classroom_405': 'Classroom 405'
 }
 
-# Run the function to draw the building with floor switching
+# Run the function to draw the building with floor switching and checklists
 draw_building_with_switching(room_names=room_names)
