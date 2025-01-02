@@ -177,29 +177,36 @@ def draw_fourth_floor(ax, floor_number, room_names=None, highlight_room=None):
     ax.text(width / 2, height + 0.5, f"Floor {floor_number}", ha='center', fontsize=12, weight='bold')
     
 #switch floor
+
 def draw_building_with_switching(room_names=None):
     fig, ax = plt.subplots(figsize=(12, 6))
     plt.subplots_adjust(bottom=0.3)
 
     current_floor = [1]
 
-    def update_checklist(floor):
-      if floor == 1:
-          # Activate all check buttons for floor 1
-          for i in range(len(checklist.labels)):  # Iterate through all check buttons
-              checklist.set_active(i)  # Activate each button by index
-      elif floor == 2:
-          # Activate all check buttons for floor 2
-          for i in range(len(checklist.labels)): 
-              checklist.set_active(i)
-      elif floor == 3:
-          # Activate all check buttons for floor 3
-          for i in range(len(checklist.labels)):
-              checklist.set_active(i)
-      elif floor == 4:
-          # Activate all check buttons for floor 4
-          for i in range(len(checklist.labels)):
-              checklist.set_active(i) 
+    def update_checklist(floor, checklist1, checklist2):
+        # Disable all checkboxes first
+        for i in range(len(checklist1.labels)):
+            checklist1.set_active(i, False)
+        for i in range(len(checklist2.labels)):
+            checklist2.set_active(i, False)
+
+        if floor == 1:
+            # Activate checkboxes for floor 1
+            for i in range(0, 10):  # First 10 rooms for floor 1
+                checklist1.set_active(i, True)
+        elif floor == 2:
+            # Activate checkboxes for floor 2
+            for i in range(0, 7):  # First 7 rooms for floor 2
+                checklist2.set_active(i, True)
+        elif floor == 3:
+            # Activate checkboxes for floor 3
+            for i in range(7, 10):  # Next rooms for floor 3
+                checklist1.set_active(i, True)
+        elif floor == 4:
+            # Activate checkboxes for floor 4
+            for i in range(10, len(checklist1.labels)):  # Remaining rooms for floor 4
+                checklist1.set_active(i, True)
 
     def update_floor(floor):
         ax.clear()
@@ -217,10 +224,7 @@ def draw_building_with_switching(room_names=None):
         ax.axis('off')
         plt.draw()
         # Update checklist based on current floor
-        update_checklist(floor)
-
-        # Update checklist based on current floor
-        update_checklist(floor)
+        update_checklist(floor, checklist1, checklist2)
 
     def switch_floor(delta):
         new_floor = current_floor[0] + delta
@@ -238,11 +242,10 @@ def draw_building_with_switching(room_names=None):
     btn_next.on_clicked(lambda event: switch_floor(1))
 
     # Checklists for the floors
-    ax_checklist = plt.axes([0.05, 0.2, 0.3, 0.15])
-    checklist_labels = []
-
-    # Define room names for checklists
-    checklist_labels = ['Laboratorium Mac', 'Laboratorium SI', 'Laboratorium DKV',
+    ax_checklist1 = plt.axes([0.1, 0.2, 0.3, 0.15])
+    ax_checklist2 = plt.axes([0.6, 0.2, 0.3, 0.15])
+    
+    checklist1_labels = ['Laboratorium Mac', 'Laboratorium SI', 'Laboratorium DKV',
             'Laboratorium Basis Data', 'Laboratorium Elektro',
             'Classroom 201', 'Classroom 202', 'Classroom 203', 'Classroom 204', 'Classroom 205',
             'Laboratorium CRC', 'Laboratorium OLB', 'Laboratorium IoT',
@@ -251,11 +254,21 @@ def draw_building_with_switching(room_names=None):
             'Classroom 401', 'Classroom 402', 'Classroom 403', 'Classroom 404', 'Classroom 405'
         ]
     
-    checklist = CheckButtons(ax_checklist, checklist_labels, [False] * len(checklist_labels))
+    checklist2_labels = ['Laboratorium Mac', 'Laboratorium SI', 'Laboratorium DKV',
+            'Laboratorium Basis Data', 'Laboratorium Elektro',
+            'Classroom 201', 'Classroom 202', 'Classroom 203', 'Classroom 204', 'Classroom 205',
+            'Laboratorium CRC', 'Laboratorium OLB', 'Laboratorium IoT',
+            'Classroom 301', 'Classroom 302', 'Classroom 303', 'Classroom 304', 'Classroom 305',
+            'Laboratorium Cyber', 'Laboratorium Akuntansi', 'Laboratorium ML',
+            'Classroom 401', 'Classroom 402', 'Classroom 403', 'Classroom 404', 'Classroom 405'
+        ]
     
+    checklist1 = CheckButtons(ax_checklist1, checklist1_labels, [False] * len(checklist1_labels))
+    checklist2 = CheckButtons(ax_checklist2, checklist2_labels, [False] * len(checklist2_labels))
+
+    # Displaying the plot
     update_floor(current_floor[0])
-    plt.show()
-    
+    plt.show()    
 room_names = {
     'large_room': 'Laboratorium Mac',
     'floor 1 room 1': 'Laboratorium SI',
