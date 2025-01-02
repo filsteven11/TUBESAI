@@ -1,9 +1,8 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-from matplotlib.widgets import Button,CheckButtons
+from matplotlib.widgets import Button, CheckButtons
 
-def draw_floor(ax, floor_number, room_names=None):
-    # Draw a single floor with rooms, stairs, lift, and entrance. Allow custom room names.
+def draw_floor(ax, floor_number, room_names=None, highlight_room=None):
     width, height = 12, 6
     room_width = width / 3
     F1R0 = height / 2
@@ -16,14 +15,15 @@ def draw_floor(ax, floor_number, room_names=None):
     ax.text(width / 2, -0.3, 'Entrance', ha='center', fontsize=10, weight='bold')
 
     stair_width = 1
-    ax.add_patch(patches.Rectangle((0, height / 2), stair_width, 1.5, edgecolor='black', facecolor='lightblue'))
-    ax.add_patch(patches.Rectangle((width - stair_width, height / 2), stair_width, 1.5, edgecolor='black', facecolor='lightblue'))
+    ax.add_patch(patches.Rectangle((0, height / 2), stair_width, 1.5, edgecolor='black', facecolor='lightblue'))  # Left stair
+    ax.add_patch(patches.Rectangle((width - stair_width, height / 2), stair_width, 1.5, edgecolor='black', facecolor='lightblue'))  # Right stair
     ax.text(0.5, height / 2 + 1.6, 'Stairs', ha='center', fontsize=9, weight='bold')
     ax.text(width - 0.5, height / 2 + 1.6, 'Stairs', ha='center', fontsize=9, weight='bold')
 
-    ax.add_patch(patches.Rectangle((stair_width, height / 2), 2, 1.5, edgecolor='black', facecolor='lightgreen'))
+    ax.add_patch(patches.Rectangle((stair_width, height / 2), 2, 1.5, edgecolor='black', facecolor='lightgreen'))  # Lift
     ax.text(stair_width + 1, height / 2 + 1.6, 'Lift', ha='center', fontsize=9, weight='bold')
 
+    # Draw rooms
     labmac = room_names.get('large_room', 'Laboratorium Mac') if room_names else 'Laboratorium Mac'
     ax.add_patch(patches.Rectangle((stair_width + 2, height / 2), room_width, F1R0, edgecolor='black', facecolor='none'))
     ax.text(stair_width + 2 + room_width / 2, height / 2 + F1R0 / 2, labmac, ha='center', va='center', fontsize=10)
@@ -38,11 +38,10 @@ def draw_floor(ax, floor_number, room_names=None):
 
     ax.text(width / 2, height + 0.5, f" Floor {floor_number}", ha='center', fontsize=12, weight='bold')
 
-def draw_second_floor(ax, floor_number, room_names=None):
-    # Draw a second floor with 8 classrooms, stairs, lift, and restrooms.
+def draw_second_floor(ax, floor_number, room_names=None, highlight_room=None):
     width, height = 12, 6
-    room_width = width / 7.5  # Width of each classroom
-    room_height = height / 2  # Height of each classroom
+    room_width = width / 7.5
+    room_height = height / 2
 
     ax.add_patch(patches.Rectangle((0, 0), width, height, edgecolor='black', facecolor='none', lw=2))
 
@@ -57,7 +56,7 @@ def draw_second_floor(ax, floor_number, room_names=None):
 
     # Draw Classrooms (5 total)
     for i in range(5):
-        room_name = room_names.get(f'classroom_{i+201}', f'Classroom {i+201}') if room_names else f'Classroom {i+201}'
+        room_name = room_names.get(f'floor 2 classroom_{i+201}', f'Classroom {i+201}') if room_names else f'Classroom {i+201}'
         ax.add_patch(patches.Rectangle((stair_width + 2 + i * room_width, height / 2), room_width, room_height, edgecolor='black', facecolor='none'))
         ax.text(stair_width + 2 + i * room_width + room_width / 2, height / 2 + room_height / 2, room_name, ha='center', va='center', fontsize=10)
 
@@ -79,19 +78,18 @@ def draw_second_floor(ax, floor_number, room_names=None):
 
     labbasdat = room_names.get('floor 2 room 2', 'Laboratorium Basis Data') if room_names else 'Laboratorium Basis Data'
     ax.add_patch(patches.Rectangle((wc_width + room_width * 2, 0), room_width * 2, F2R0, edgecolor='black', facecolor='none'))
-    ax.text(stair_width + 4 + room_width / 2, F2R0 / 2, labbasdat, ha='center', va='center', fontsize=10)
+    ax.text(stair_width + 4 + room_width / 2, F2R1 / 2, labbasdat, ha='center', va='center', fontsize=10)
     
     labelektro = room_names.get('floor 2 room 3', 'Laboratorium Elektro') if room_names else 'Laboratorium Elektro'
     ax.add_patch(patches.Rectangle((wc_width + room_width * 4, 0), room_width * 2.25, F2R0, edgecolor='black', facecolor='none'))
-    ax.text(stair_width + 7.5 + room_width / 2, F2R0 / 2, labelektro, ha='center', va='center', fontsize=10)
+    ax.text(stair_width + 7.5 + room_width / 2, F2R2 / 2, labelektro, ha='center', va='center', fontsize=10)
     
     ax.text(width / 2, height + 0.5, f" Floor {floor_number}", ha='center', fontsize=12, weight='bold')
 
-def draw_third_floor(ax, floor_number, room_names=None):
-    # Draw a third floor with 8 classrooms, stairs, lift, and restrooms.
+def draw_third_floor(ax, floor_number, room_names=None, highlight_room=None):
     width, height = 12, 6
-    room_width = width / 7.5  # Width of each classroom
-    room_height = height / 2  # Height of each classroom
+    room_width = width / 7.5
+    room_height = height / 2
 
     ax.add_patch(patches.Rectangle((0, 0), width, height, edgecolor='black', facecolor='none', lw=2))
 
@@ -106,7 +104,7 @@ def draw_third_floor(ax, floor_number, room_names=None):
 
     # Draw Classrooms (5 total)
     for i in range(5):
-        room_name = room_names.get(f'classroom_{i+301}', f'Classroom {i+301}') if room_names else f'Classroom {i+301}'
+        room_name = room_names.get(f'floor 3 classroom_{i+301}', f'Classroom {i+301}') if room_names else f'Classroom {i+301}'
         ax.add_patch(patches.Rectangle((stair_width + 2 + i * room_width, height / 2), room_width, room_height, edgecolor='black', facecolor='none'))
         ax.text(stair_width + 2 + i * room_width + room_width / 2, height / 2 + room_height / 2, room_name, ha='center', va='center', fontsize=10)
 
@@ -133,11 +131,10 @@ def draw_third_floor(ax, floor_number, room_names=None):
 
     ax.text(width / 2, height + 0.5, f"Floor {floor_number}", ha='center', fontsize=12, weight='bold')
 
-def draw_fourth_floor(ax, floor_number, room_names=None):
-    # Draw a fourth floor with labs and classrooms.
+def draw_fourth_floor(ax, floor_number, room_names=None, highlight_room=None):
     width, height = 12, 6
-    room_width = width / 7.5  # Width of each classroom
-    room_height = height / 2  # Height of each classroom
+    room_width = width / 7.5 
+    room_height = height / 2
 
     ax.add_patch(patches.Rectangle((0, 0), width, height, edgecolor='black', facecolor='none', lw=2))
 
@@ -152,7 +149,7 @@ def draw_fourth_floor(ax, floor_number, room_names=None):
 
     # Draw Classrooms (5 total)
     for i in range(5):
-        room_name = room_names.get(f'classroom_{i+401}', f'Classroom {i+401}') if room_names else f'Classroom {i+401}'
+        room_name = room_names.get(f'floor 4 classroom_{i+401}', f'Classroom {i+401}') if room_names else f'Classroom {i+401}'
         ax.add_patch(patches.Rectangle((stair_width + 2 + i * room_width, height / 2), room_width, room_height, edgecolor='black', facecolor='none'))
         ax.text(stair_width + 2 + i * room_width + room_width / 2, height / 2 + room_height / 2, room_name, ha='center', va='center', fontsize=10)
 
@@ -178,8 +175,8 @@ def draw_fourth_floor(ax, floor_number, room_names=None):
     ax.text(wc_width + 5.125 * room_width, height / 8, lab_ml, ha='center', va='center', fontsize=10)
 
     ax.text(width / 2, height + 0.5, f"Floor {floor_number}", ha='center', fontsize=12, weight='bold')
-    ##switch floor
-
+    
+#switch floor
 def draw_building_with_switching(room_names=None):
     fig, ax = plt.subplots(figsize=(12, 6))
     plt.subplots_adjust(bottom=0.3)
@@ -245,20 +242,11 @@ def draw_building_with_switching(room_names=None):
     checklist_labels = []
 
     # Define room names for checklists
-    if current_floor[0] == 1:
-        checklist_labels = ['Laboratorium Mac', 'Laboratorium SI', 'Laboratorium DKV']
-    elif current_floor[0] == 2:
-        checklist_labels = [
+    checklist_labels = ['Laboratorium Mac', 'Laboratorium SI', 'Laboratorium DKV',
             'Laboratorium Basis Data', 'Laboratorium Elektro',
-            'Classroom 201', 'Classroom 202', 'Classroom 203', 'Classroom 204', 'Classroom 205'
-        ]
-    elif current_floor[0] == 3:
-        checklist_labels = [
+            'Classroom 201', 'Classroom 202', 'Classroom 203', 'Classroom 204', 'Classroom 205',
             'Laboratorium CRC', 'Laboratorium OLB', 'Laboratorium IoT',
-            'Classroom 301', 'Classroom 302', 'Classroom 303', 'Classroom 304', 'Classroom 305'
-        ]
-    elif current_floor[0] == 4:
-        checklist_labels = [
+            'Classroom 301', 'Classroom 302', 'Classroom 303', 'Classroom 304', 'Classroom 305',
             'Laboratorium Cyber', 'Laboratorium Akuntansi', 'Laboratorium ML',
             'Classroom 401', 'Classroom 402', 'Classroom 403', 'Classroom 404', 'Classroom 405'
         ]
@@ -267,7 +255,7 @@ def draw_building_with_switching(room_names=None):
     
     update_floor(current_floor[0])
     plt.show()
-
+    
 room_names = {
     'large_room': 'Laboratorium Mac',
     'floor 1 room 1': 'Laboratorium SI',
@@ -281,22 +269,21 @@ room_names = {
     'floor 4 room 1': 'Laboratorium Cyber',
     'floor 4 room 2': 'Laboratorium Akuntansi',
     'floor 4 room 3': 'Laboratorium ML',
-    'classroom_201': 'Classroom 201',
-    'classroom_202': 'Classroom 202',
-    'classroom_203': 'Classroom 203',
-    'classroom_204': 'Classroom 204',
-    'classroom_205': 'Classroom 205',
-    'classroom_301': 'Classroom 301',
-    'classroom_302': 'Classroom 302',
-    'classroom_303': 'Classroom 303',
-    'classroom_304': 'Classroom 304',
-    'classroom_305': 'Classroom 305',
-    'classroom_401': 'Classroom 401',
-    'classroom_402': 'Classroom 402',
-    'classroom_403': 'Classroom 403',
-    'classroom_404': 'Classroom 404',
-    'classroom_405': 'Classroom 405'
+    'floor 2 classroom_201': 'Classroom 201',
+    'floor 2 classroom_202': 'Classroom 202',
+    'floor 2 classroom_203': 'Classroom 203',
+    'floor 2 classroom_204': 'Classroom 204',
+    'floor 2 classroom_205': 'Classroom 205',
+    'floor 3 classroom_301': 'Classroom 301',
+    'floor 3 classroom_302': 'Classroom 302',
+    'floor 3 classroom_303': 'Classroom 303',
+    'floor 3 classroom_304': 'Classroom 304',
+    'floor 3 classroom_305': 'Classroom 305',
+    'floor 4 classroom_401': 'Classroom 401',
+    'floor 4 classroom_402': 'Classroom 402',
+    'floor 4 classroom_403': 'Classroom 403',
+    'floor 4 classroom_404': 'Classroom 404',
+    'floor 4 classroom_405': 'Classroom 405'
 }
 
-# Run the function to draw the building with floor switching and checklists
 draw_building_with_switching(room_names=room_names)
