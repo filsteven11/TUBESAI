@@ -1,6 +1,11 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib.widgets import Button, CheckButtons
+import random
+import time
+import tkinter as tk
+from tkinter import messagebox
+
 
 def draw_floor(ax, floor_number, room_names=None, highlight_room=None):
     width, height = 12, 6
@@ -226,6 +231,8 @@ def draw_building_with_switching(room_names=None):
         # Update checklist based on current floor
         update_checklist(floor, checklist1, checklist2)
 
+
+
     def switch_floor(delta):
         new_floor = current_floor[0] + delta
         if 1 <= new_floor <= 4:
@@ -268,7 +275,46 @@ def draw_building_with_switching(room_names=None):
 
     # Displaying the plot
     update_floor(current_floor[0])
-    plt.show()    
+    plt.show()  
+    
+
+
+# Fungsi untuk menghasilkan waktu acak
+def generate_random_time():
+    random_hour = random.randint(0, 23)
+    random_minute = random.randint(0, 59)
+    
+    return f"{random_hour:02d}:{random_minute:02d}"
+
+# Fungsi untuk menampilkan waktu acak
+def show_random_time():
+    time = generate_random_time()
+    messagebox.showinfo("Random Time", f"The random time is: {time}")
+
+# Fungsi utama untuk membuat GUI dengan menu baru
+def create_gui_with_random_time():
+    # Membuat window tkinter
+    root = tk.Tk()
+    root.title("Building Layout")
+
+    # Menambahkan tombol untuk menampilkan waktu acak
+    btn_random_time = tk.Button(root, text="Show Random Time", command=show_random_time)
+    btn_random_time.pack(pady=20)
+
+    # Membuat menu
+    menu_bar = tk.Menu(root)
+    root.config(menu=menu_bar)
+
+    # Menambahkan menu "Options"
+    options_menu = tk.Menu(menu_bar, tearoff=0)
+    menu_bar.add_cascade(label="Options", menu=options_menu)
+
+    # Menambahkan item menu untuk menampilkan waktu acak
+    options_menu.add_command(label="Show Random Time", command=show_random_time)
+
+    # Menjalankan aplikasi
+    root.mainloop()
+ 
 room_names = {
     'large_room': 'Laboratorium Mac',
     'floor 1 room 1': 'Laboratorium SI',
@@ -300,3 +346,4 @@ room_names = {
 }
 
 draw_building_with_switching(room_names=room_names)
+create_gui_with_random_time()
