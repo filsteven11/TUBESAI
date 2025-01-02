@@ -1,6 +1,11 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib.widgets import Button, CheckButtons
+import random
+import time
+import tkinter as tk
+from tkinter import messagebox, ttk
+
 
 def draw_floor(ax, floor_number, room_names=None, highlight_room=None):
     width, height = 12, 6
@@ -183,24 +188,6 @@ def draw_building_with_switching(room_names=None):
 
     current_floor = [1]
 
-    def update_checklist(floor):
-      if floor == 1:
-          # Activate all check buttons for floor 1
-          for i in range(len(checklist.labels)):  # Iterate through all check buttons
-              checklist.set_active(i)  # Activate each button by index
-      elif floor == 2:
-          # Activate all check buttons for floor 2
-          for i in range(len(checklist.labels)): 
-              checklist.set_active(i)
-      elif floor == 3:
-          # Activate all check buttons for floor 3
-          for i in range(len(checklist.labels)):
-              checklist.set_active(i)
-      elif floor == 4:
-          # Activate all check buttons for floor 4
-          for i in range(len(checklist.labels)):
-              checklist.set_active(i) 
-
     def update_floor(floor):
         ax.clear()
         if floor == 1:
@@ -216,11 +203,6 @@ def draw_building_with_switching(room_names=None):
         ax.set_ylim(-1, 7)
         ax.axis('off')
         plt.draw()
-        # Update checklist based on current floor
-        update_checklist(floor)
-
-        # Update checklist based on current floor
-        update_checklist(floor)
 
     def switch_floor(delta):
         new_floor = current_floor[0] + delta
@@ -237,25 +219,75 @@ def draw_building_with_switching(room_names=None):
     btn_prev.on_clicked(lambda event: switch_floor(-1))
     btn_next.on_clicked(lambda event: switch_floor(1))
 
-    # Checklists for the floors
-    ax_checklist = plt.axes([0.05, 0.2, 0.3, 0.15])
-    checklist_labels = []
+    # Create a Tkinter window for listboxes
+    root = tk.Tk()
+    root.title("Room Selection")
 
-    # Define room names for checklists
-    checklist_labels = ['Laboratorium Mac', 'Laboratorium SI', 'Laboratorium DKV',
-            'Laboratorium Basis Data', 'Laboratorium Elektro',
-            'Classroom 201', 'Classroom 202', 'Classroom 203', 'Classroom 204', 'Classroom 205',
-            'Laboratorium CRC', 'Laboratorium OLB', 'Laboratorium IoT',
-            'Classroom 301', 'Classroom 302', 'Classroom 303', 'Classroom 304', 'Classroom 305',
-            'Laboratorium Cyber', 'Laboratorium Akuntansi', 'Laboratorium ML',
-            'Classroom 401', 'Classroom 402', 'Classroom 403', 'Classroom 404', 'Classroom 405'
-        ]
-    
-    checklist = CheckButtons(ax_checklist, checklist_labels, [False] * len(checklist_labels))
-    
+    # Prepare the room options for the listboxes
+    room_values = list(room_names.values()) if room_names else []
+
+    # Listbox for selecting the start state
+    listbox1_label = tk.Label(root, text="Select Start State:")
+    listbox1_label.pack()
+    listbox1 = tk.Listbox(root, selectmode=tk.SINGLE)
+    for room in room_values:
+        listbox1.insert(tk.END, room)
+    listbox1.pack()
+
+    # Listbox for selecting the goal
+    listbox2_label = tk.Label(root, text="Select Goal State:")
+    listbox2_label.pack()
+    listbox2 = tk.Listbox(root, selectmode=tk.SINGLE)
+    for room in room_values:
+        listbox2.insert(tk.END, room)
+    listbox2.pack()
+
+    # Function to get selected room values
+    def get_selected_rooms():
+        selected_room1 = listbox1.get(listbox1.curselection()) if listbox1.curselection() else None
+        selected_room2 = listbox2.get(listbox2.curselection()) if listbox2.curselection() else None
+        print(f"Selected Start State: {selected_room1}, Selected Goal State: {selected_room2}")
+
+    # Button to print selected rooms
+    btn_show_rooms = tk.Button(root, text='Show Selected Rooms', command=get_selected_rooms)
+    btn_show_rooms.pack()
+
+    # Displaying the plot
     update_floor(current_floor[0])
-    plt.show()
     
+    # Start the Tkinter main loop
+    plt.show(block=False)
+    root.mainloop()
+
+def generate_random_time():
+    # Generate random hour and minute
+    random_hour = random.randint(0, 23)
+    random_minute = random.randint(0, 59)
+    
+    # Format time as HH:MM
+    return f"{random_hour:02}:{random_minute:02}"
+
+# Create a tkinter window to display the random time
+def display_random_time():
+    random_time = generate_random_time()  # Generate a random time
+    root = tk.Tk()  # Create a new Tkinter window
+    root.title("Random Time Display")
+
+    # Add label with the random time
+    label = tk.Label(root, text=f"Random Time: {random_time}", font=('Helvetica', 14))
+    label.pack(pady=20)
+
+    # Add an OK button to close the window
+    button = tk.Button(root, text="OK", command=root.quit)
+    button.pack(pady=10)
+
+    # Run the Tkinter event loop
+    root.mainloop()
+
+# Call the function to display the random time in a new window
+display_random_time()
+
+ 
 room_names = {
     'large_room': 'Laboratorium Mac',
     'floor 1 room 1': 'Laboratorium SI',
