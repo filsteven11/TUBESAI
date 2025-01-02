@@ -4,7 +4,7 @@ from matplotlib.widgets import Button, CheckButtons
 import random
 import time
 import tkinter as tk
-from tkinter import messagebox, ttk
+from tkinter import messagebox
 
 
 def draw_floor(ax, floor_number, room_names=None, highlight_room=None):
@@ -182,6 +182,7 @@ def draw_fourth_floor(ax, floor_number, room_names=None, highlight_room=None):
     ax.text(width / 2, height + 0.5, f"Floor {floor_number}", ha='center', fontsize=12, weight='bold')
     
 #switch floor
+
 def draw_building_with_switching(room_names=None):
     fig, ax = plt.subplots(figsize=(12, 6))
     plt.subplots_adjust(bottom=0.3)
