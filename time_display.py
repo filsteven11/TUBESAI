@@ -1,7 +1,6 @@
 import random
 import time
 import tkinter as tk
-from tkinter import messagebox
 
 def generate_random_time():
     # Generate random hour and minute
