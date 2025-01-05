@@ -12,7 +12,13 @@ def load_room_names(file_path):
         data = json.load(file)
     return data['room_names']
 
-def draw_floor(ax, floor_number, room_names=None, highlight_room=None):
+def draw_pinpoint(ax, x, y, label):
+    """Draw a pinpoint at the specified location."""
+    ax.plot(x, y, 'ro')  # Red dot
+    ax.text(x, y + 0.2, label, ha='center', fontsize=8, color='black')
+
+def draw_floor(ax, floor_number, room_names=None):
+    """Draw a single floor with rooms, stairs, lift, and entrance. Allow custom room names."""
     width, height = 12, 6
     room_width = width / 3
     F1R0 = height / 2
@@ -22,33 +28,36 @@ def draw_floor(ax, floor_number, room_names=None, highlight_room=None):
     ax.add_patch(patches.Rectangle((0, 0), width, height, edgecolor='black', facecolor='none', lw=2))
     entrance_width = 2
     ax.add_patch(patches.Rectangle((width / 2 - entrance_width / 2, 0), entrance_width, 1, edgecolor='black', facecolor='lightgrey'))
-    ax.text(width / 2, -0.3, 'Entrance', ha='center', fontsize=10, weight='bold')
+
+    # Draw pin for entrance
+    draw_pinpoint(ax, width / 2, 0.5, 'Entrance')
 
     stair_width = 1
-    ax.add_patch(patches.Rectangle((0, height / 2), stair_width, 1.5, edgecolor='black', facecolor='lightblue'))  # Left stair
-    ax.add_patch(patches.Rectangle((width - stair_width, height / 2), stair_width, 1.5, edgecolor='black', facecolor='lightblue'))  # Right stair
+    ax.add_patch(patches.Rectangle((0, height / 2), stair_width, 1.5, edgecolor='black', facecolor='lightblue'))
+    ax.add_patch(patches.Rectangle((width - stair_width, height / 2), stair_width, 1.5, edgecolor='black', facecolor='lightblue'))
     ax.text(0.5, height / 2 + 1.6, 'Stairs', ha='center', fontsize=9, weight='bold')
     ax.text(width - 0.5, height / 2 + 1.6, 'Stairs', ha='center', fontsize=9, weight='bold')
 
-    ax.add_patch(patches.Rectangle((stair_width, height / 2), 2, 1.5, edgecolor='black', facecolor='lightgreen'))  # Lift
+    ax.add_patch(patches.Rectangle((stair_width, height / 2), 2, 1.5, edgecolor='black', facecolor='lightgreen'))
     ax.text(stair_width + 1, height / 2 + 1.6, 'Lift', ha='center', fontsize=9, weight='bold')
 
-    # Draw rooms
-    labmac = room_names.get('large_room', 'Laboratorium Mac') if room_names else 'Laboratorium Mac'
+    # Draw rooms and pinpoints
+    labkom = room_names.get('large_room', 'Laboratorium Komputer') if room_names else 'Laboratorium Komputer'
     ax.add_patch(patches.Rectangle((stair_width + 2, height / 2), room_width, F1R0, edgecolor='black', facecolor='none'))
-    ax.text(stair_width + 2 + room_width / 2, height / 2 + F1R0 / 2, labmac, ha='center', va='center', fontsize=10)
+    # ax.text(stair_width + 2 + room_width / 2, height / 2 + F1R0 / 2, labkom, ha='center', va='center', fontsize=10)
+    draw_pinpoint(ax, stair_width + 2 + room_width / 2, height / 2 + F1R0 / 2, labkom)
 
     labsi = room_names.get('floor 1 room 1', 'Laboratorium SI') if room_names else 'Laboratorium SI'
     ax.add_patch(patches.Rectangle((stair_width + 2 + room_width, height / 2), room_width / 2, F1R1, edgecolor='black', facecolor='none'))
-    ax.text(stair_width + 2 + room_width + room_width / 4, height / 2 + F1R1 / 2, labsi, ha='center', va='center', fontsize=9)
+    draw_pinpoint(ax, stair_width + 2 + room_width + room_width / 4, height / 2 + F1R1 / 2, labsi)
 
     labdkv = room_names.get('floor 1 room 2', 'Laboratorium DKV') if room_names else 'Laboratorium DKV'
     ax.add_patch(patches.Rectangle((stair_width + 2 + room_width + room_width / 2, height / 2), room_width / 2, F1R2, edgecolor='black', facecolor='none'))
-    ax.text(stair_width + 2 + room_width + room_width / 2 + (room_width / 4), height / 2 + F1R2 / 2, labdkv, ha='center', va='center', fontsize=9)
+    draw_pinpoint(ax, stair_width + 2 + room_width + room_width / 2 + (room_width / 4), height / 2 + F1R2 / 2, labdkv)
 
     ax.text(width / 2, height + 0.5, f" Floor {floor_number}", ha='center', fontsize=12, weight='bold')
 
-def draw_second_floor(ax, floor_number, room_names=None, highlight_room=None):
+def draw_second_floor(ax, floor_number, room_names=None):
     width, height = 12, 6
     room_width = width / 7.5
     room_height = height / 2
@@ -64,39 +73,37 @@ def draw_second_floor(ax, floor_number, room_names=None, highlight_room=None):
     ax.add_patch(patches.Rectangle((stair_width, height / 2), 2, 1.5, edgecolor='black', facecolor='lightgreen'))  # Lift
     ax.text(stair_width + 1, height / 2 + 1.6, 'Lift', ha='center', fontsize=9, weight='bold')
 
-    # Draw Classrooms (5 total)
+    # Draw Classrooms and pinpoints
     for i in range(5):
         room_name = room_names.get(f'floor 2 classroom_{i+201}', f'Classroom {i+201}') if room_names else f'Classroom {i+201}'
         ax.add_patch(patches.Rectangle((stair_width + 2 + i * room_width, height / 2), room_width, room_height, edgecolor='black', facecolor='none'))
-        ax.text(stair_width + 2 + i * room_width + room_width / 2, height / 2 + room_height / 2, room_name, ha='center', va='center', fontsize=10)
+        draw_pinpoint(ax, stair_width + 2 + i * room_width + room_width / 2, height / 2 + room_height / 2, room_name)
 
-    # Add WCs
+    # Add WCs and pinpoints
     wc_width = 1
     ax.add_patch(patches.Rectangle((0, 0), wc_width, 1.5, edgecolor='black', facecolor='lightgrey'))
-    ax.text(0.5, 0.75, 'WC', ha='center', fontsize=9, weight='bold')
+    draw_pinpoint(ax, 0.5, 0.75, 'WC')
 
     ax.add_patch(patches.Rectangle((width - wc_width, 0), wc_width, 1.5, edgecolor='black', facecolor='lightgrey'))
-    ax.text(width - 0.5, 0.75, 'WC', ha='center', fontsize=9, weight='bold')
-        
-    # Draw Lab 
+    draw_pinpoint(ax, width - 0.5, 0.75, 'WC')
+
+    # Draw Lab and pinpoints
     F2R0 = height / 4
-    F2R1 = height / 4
-    F2R2 = height / 4
-    labkom = room_names.get('floor 2_room 1', 'Laboratorium Komputer') if room_names else 'Laboratorium Komputer'
+    labkom = room_names.get('floor 2 room 1', 'Laboratorium Komputer') if room_names else 'Laboratorium Komputer'
     ax.add_patch(patches.Rectangle((wc_width, 0), room_width * 2, F2R0, edgecolor='black', facecolor='none'))
-    ax.text(stair_width + 0.75 + room_width / 2, F2R0 / 2, labkom, ha='center', va='center', fontsize=10)
+    draw_pinpoint(ax, stair_width + 0.75 + room_width / 2, F2R0 / 2, labkom)
 
     labbasdat = room_names.get('floor 2 room 2', 'Laboratorium Basis Data') if room_names else 'Laboratorium Basis Data'
     ax.add_patch(patches.Rectangle((wc_width + room_width * 2, 0), room_width * 2, F2R0, edgecolor='black', facecolor='none'))
-    ax.text(stair_width + 4 + room_width / 2, F2R1 / 2, labbasdat, ha='center', va='center', fontsize=10)
-    
+    draw_pinpoint(ax, stair_width + 4 + room_width / 2, F2R0 / 2, labbasdat)
+
     labelektro = room_names.get('floor 2 room 3', 'Laboratorium Elektro') if room_names else 'Laboratorium Elektro'
     ax.add_patch(patches.Rectangle((wc_width + room_width * 4, 0), room_width * 2.25, F2R0, edgecolor='black', facecolor='none'))
-    ax.text(stair_width + 7.5 + room_width / 2, F2R2 / 2, labelektro, ha='center', va='center', fontsize=10)
-    
+    draw_pinpoint(ax, stair_width + 7.5 + room_width / 2, F2R0 / 2, labelektro)
+
     ax.text(width / 2, height + 0.5, f" Floor {floor_number}", ha='center', fontsize=12, weight='bold')
 
-def draw_third_floor(ax, floor_number, room_names=None, highlight_room=None):
+def draw_third_floor(ax, floor_number, room_names=None):
     width, height = 12, 6
     room_width = width / 7.5
     room_height = height / 2
@@ -112,36 +119,36 @@ def draw_third_floor(ax, floor_number, room_names=None, highlight_room=None):
     ax.add_patch(patches.Rectangle((stair_width, height / 2), 2, 1.5, edgecolor='black', facecolor='lightgreen'))  # Lift
     ax.text(stair_width + 1, height / 2 + 1.6, 'Lift', ha='center', fontsize=9, weight='bold')
 
-    # Draw Classrooms (5 total)
+    # Draw Classrooms and pinpoints
     for i in range(5):
         room_name = room_names.get(f'floor 3 classroom_{i+301}', f'Classroom {i+301}') if room_names else f'Classroom {i+301}'
         ax.add_patch(patches.Rectangle((stair_width + 2 + i * room_width, height / 2), room_width, room_height, edgecolor='black', facecolor='none'))
-        ax.text(stair_width + 2 + i * room_width + room_width / 2, height / 2 + room_height / 2, room_name, ha='center', va='center', fontsize=10)
+        draw_pinpoint(ax, stair_width + 2 + i * room_width + room_width / 2, height / 2 + room_height / 2, room_name)
 
-    # Add WCs
+    # Add WCs and pinpoints
     wc_width = 1
     ax.add_patch(patches.Rectangle((0, 0), wc_width, 1.5, edgecolor='black', facecolor='lightgrey'))
-    ax.text(0.5, 0.75, 'WC', ha='center', fontsize=9, weight='bold')
+    draw_pinpoint(ax, 0.5, 0.75, 'WC')
 
     ax.add_patch(patches.Rectangle((width - wc_width, 0), wc_width, 1.5, edgecolor='black', facecolor='lightgrey'))
-    ax.text(width - 0.5, 0.75, 'WC', ha='center', fontsize=9, weight='bold')
+    draw_pinpoint(ax, width - 0.5, 0.75, 'WC')
 
-    # Draw Labs
+    # Draw Labs and pinpoints
     lab_crc = room_names.get('floor 3 room 1', 'Laboratorium CRC') if room_names else 'Laboratorium CRC'
     ax.add_patch(patches.Rectangle((wc_width, 0), room_width * 2, height / 4, edgecolor='black', facecolor='none'))
-    ax.text(wc_width + room_width, height / 8, lab_crc, ha='center', va='center', fontsize=10)
+    draw_pinpoint(ax, wc_width + room_width, height / 8, lab_crc)
 
     lab_olb = room_names.get('floor 3 room 2', 'Laboratorium OLB') if room_names else 'Laboratorium OLB'
     ax.add_patch(patches.Rectangle((wc_width + room_width * 2, 0), room_width * 2, height / 4, edgecolor='black', facecolor='none'))
-    ax.text(wc_width + 3 * room_width, height / 8, lab_olb, ha='center', va='center', fontsize=10)
+    draw_pinpoint(ax, wc_width + 3 * room_width, height / 8, lab_olb)
 
     lab_iot = room_names.get('floor 3 room 3', 'Laboratorium IoT') if room_names else 'Laboratorium IoT'
     ax.add_patch(patches.Rectangle((wc_width + room_width * 4, 0), room_width * 2.25, height / 4, edgecolor='black', facecolor='none'))
-    ax.text(wc_width + 5.125 * room_width, height / 8, lab_iot, ha='center', va='center', fontsize=10)
+    draw_pinpoint(ax, wc_width + 5.125 * room_width, height / 8, lab_iot)
 
     ax.text(width / 2, height + 0.5, f"Floor {floor_number}", ha='center', fontsize=12, weight='bold')
 
-def draw_fourth_floor(ax, floor_number, room_names=None, highlight_room=None):
+def draw_fourth_floor(ax, floor_number, room_names=None):
     width, height = 12, 6
     room_width = width / 7.5 
     room_height = height / 2
@@ -157,32 +164,32 @@ def draw_fourth_floor(ax, floor_number, room_names=None, highlight_room=None):
     ax.add_patch(patches.Rectangle((stair_width, height / 2), 2, 1.5, edgecolor='black', facecolor='lightgreen'))  # Lift
     ax.text(stair_width + 1, height / 2 + 1.6, 'Lift', ha='center', fontsize=9, weight='bold')
 
-    # Draw Classrooms (5 total)
+    # Draw Classrooms and pinpoints
     for i in range(5):
         room_name = room_names.get(f'floor 4 classroom_{i+401}', f'Classroom {i+401}') if room_names else f'Classroom {i+401}'
         ax.add_patch(patches.Rectangle((stair_width + 2 + i * room_width, height / 2), room_width, room_height, edgecolor='black', facecolor='none'))
-        ax.text(stair_width + 2 + i * room_width + room_width / 2, height / 2 + room_height / 2, room_name, ha='center', va='center', fontsize=10)
+        draw_pinpoint(ax, stair_width + 2 + i * room_width + room_width / 2, height / 2 + room_height / 2, room_name)
 
-    # Add WCs
+    # Add WCs and pinpoints
     wc_width = 1
     ax.add_patch(patches.Rectangle((0, 0), wc_width, 1.5, edgecolor='black', facecolor='lightgrey'))
-    ax.text(0.5, 0.75, 'WC', ha='center', fontsize=9, weight='bold')
+    draw_pinpoint(ax, 0.5, 0.75, 'WC')
 
     ax.add_patch(patches.Rectangle((width - wc_width, 0), wc_width, 1.5, edgecolor='black', facecolor='lightgrey'))
-    ax.text(width - 0.5, 0.75, 'WC', ha='center', fontsize=9, weight='bold')
+    draw_pinpoint(ax, width - 0.5, 0.75, 'WC')
 
-    # Draw Labs
+    # Draw Labs and pinpoints
     lab_cyber = room_names.get('floor 4 room 1', 'Laboratorium Cyber') if room_names else 'Laboratorium Cyber'
     ax.add_patch(patches.Rectangle((wc_width, 0), room_width * 2, height / 4, edgecolor='black', facecolor='none'))
-    ax.text(wc_width + room_width, height / 8, lab_cyber, ha='center', va='center', fontsize=10)
+    draw_pinpoint(ax, wc_width + room_width, height / 8, lab_cyber)
 
     lab_accounting = room_names.get('floor 4 room 2', 'Laboratorium Akuntansi') if room_names else 'Laboratorium Akuntansi'
     ax.add_patch(patches.Rectangle((wc_width + room_width * 2, 0), room_width * 2, height / 4, edgecolor='black', facecolor='none'))
-    ax.text(wc_width + 3 * room_width, height / 8, lab_accounting, ha='center', va='center', fontsize=10)
+    draw_pinpoint(ax, wc_width + 3 * room_width, height / 8, lab_accounting)
 
     lab_ml = room_names.get('floor 4 room 3', 'Laboratorium ML') if room_names else 'Laboratorium ML'
     ax.add_patch(patches.Rectangle((wc_width + room_width * 4, 0), room_width * 2.25, height / 4, edgecolor='black', facecolor='none'))
-    ax.text(wc_width + 5.125 * room_width, height / 8, lab_ml, ha='center', va='center', fontsize=10)
+    draw_pinpoint(ax, wc_width + 5.125 * room_width, height / 8, lab_ml)
 
     ax.text(width / 2, height + 0.5, f"Floor {floor_number}", ha='center', fontsize=12, weight='bold')
     
