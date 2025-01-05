@@ -1,11 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-from matplotlib.widgets import Button, CheckButtons
-import random
+from matplotlib.widgets import Button
 import json
-import time
-import tkinter as tk
-from tkinter import messagebox
 
 def load_room_names(file_path):
     with open(file_path, 'r') as file:
@@ -42,10 +38,10 @@ def draw_floor(ax, floor_number, room_names=None):
     ax.text(stair_width + 1, height / 2 + 1.6, 'Lift', ha='center', fontsize=9, weight='bold')
 
     # Draw rooms and pinpoints
-    labkom = room_names.get('large_room', 'Laboratorium Komputer') if room_names else 'Laboratorium Komputer'
+    labmac = room_names.get('large_room', 'Laboratorium Mac') if room_names else 'Laboratorium Mac'
     ax.add_patch(patches.Rectangle((stair_width + 2, height / 2), room_width, F1R0, edgecolor='black', facecolor='none'))
     # ax.text(stair_width + 2 + room_width / 2, height / 2 + F1R0 / 2, labkom, ha='center', va='center', fontsize=10)
-    draw_pinpoint(ax, stair_width + 2 + room_width / 2, height / 2 + F1R0 / 2, labkom)
+    draw_pinpoint(ax, stair_width + 2 + room_width / 2, height / 2 + F1R0 / 2, labmac)
 
     labsi = room_names.get('floor 1 room 1', 'Laboratorium SI') if room_names else 'Laboratorium SI'
     ax.add_patch(patches.Rectangle((stair_width + 2 + room_width, height / 2), room_width / 2, F1R1, edgecolor='black', facecolor='none'))
@@ -235,34 +231,4 @@ def draw_building_with_switching(room_names=None):
     update_floor(current_floor[0])
     plt.show()
 
-def generate_random_time():
-    # Generate random hour and minute
-    random_hour = random.randint(0, 23)
-    random_minute = random.randint(0, 59)
-    
-    # Format time as HH:MM
-    return f"{random_hour:02}:{random_minute:02}"
-
-# Create a tkinter window to display the random time
-def display_random_time():
-    random_time = generate_random_time()  # Generate a random time
-    root = tk.Tk()  # Create a new Tkinter window
-    root.title("Random Time Display")
-
-    # Add label with the random time
-    label = tk.Label(root, text=f"Random Time: {random_time}", font=('Helvetica', 14))
-    label.pack(pady=20)
-
-    # Add an OK button to close the window
-    button = tk.Button(root, text="OK", command=root.quit)
-    button.pack(pady=10)
-
-    # Run the Tkinter event loop
-    root.mainloop()
-
-# Call the function to display the random time in a new window
-display_random_time()
-
 room_names = load_room_names('room_names.json')
-
-draw_building_with_switching(room_names=room_names)

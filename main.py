@@ -1,6 +1,7 @@
 import json
 import tkinter as tk
 from navigation import IndoorNavigation
+import blueprint
 
 def load_room_names(file_path):
     with open(file_path, 'r') as file:
@@ -16,14 +17,10 @@ class RoomSelectionApp:
         self.start_state = None
         self.goal_state = None
         
-        # Create frames for each page
         self.start_frame = tk.Frame(self.master)
         self.goal_frame = tk.Frame(self.master)
 
-        # Initialize the start state selection frame
         self.create_start_frame()
-
-        # Initialize the goal state selection frame
         self.create_goal_frame()
 
         # Show the start frame initially
@@ -57,8 +54,8 @@ class RoomSelectionApp:
         selected = self.start_listbox.curselection()
         if selected:
             self.start_state = self.start_listbox.get(selected)
-            self.start_frame.pack_forget()  # Hide start frame
-            self.goal_frame.pack(fill="both", expand=True)  # Show goal frame
+            self.start_frame.pack_forget()
+            self.goal_frame.pack(fill="both", expand=True)
 
     def select_goal_state(self):
         selected = self.goal_listbox.curselection()
@@ -72,16 +69,12 @@ class RoomSelectionApp:
             shortest_path, cost = navigation.find_shortest_path(self.start_state, self.goal_state)
             if shortest_path is not None:
                 print(f"Shortest path from {self.start_state} to {self.goal_state}: {shortest_path} with total cost: {cost}")
+                blueprint.draw_building_with_switching(room_names=room_names)
+                
             else:
                 print(f"No path found from {self.start_state} to {self.goal_state}.")
 
-
-# Load room names from the JSON file
 room_names = load_room_names('room_names.json')
-
-# Create the main application window
 root = tk.Tk()
 app = RoomSelectionApp(root, room_names)
-
-# Start the Tkinter main loop
 root.mainloop()
