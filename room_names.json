@@ -1,0 +1,32 @@
+{
+    "room_names": {
+        "entrance": "Entrance",
+        "large_room": "Laboratorium Mac",
+        "floor 1 room 1": "Laboratorium SI",
+        "floor 1 room 2": "Laboratorium DKV",
+        "floor 2 room 1": "Laboratorium Komputer",
+        "floor 2 room 2": "Laboratorium Basis Data",
+        "floor 2 room 3": "Laboratorium Elektro",
+        "floor 2 classroom_201": "Classroom 201",
+        "floor 2 classroom_202": "Classroom 202",
+        "floor 2 classroom_203": "Classroom 203",
+        "floor 2 classroom_204": "Classroom 204",
+        "floor 2 classroom_205": "Classroom 205",
+        "floor 3 room 1": "Laboratorium CRC",
+        "floor 3 room 2": "Laboratorium OLB",
+        "floor 3 room 3": "Laboratorium IoT",
+        "floor 3 classroom_301": "Classroom 301",
+        "floor 3 classroom_302": "Classroom 302",
+        "floor 3 classroom_303": "Classroom 303",
+        "floor 3 classroom_304": "Classroom 304",
+        "floor 3 classroom_305": "Classroom 305",
+        "floor 4 room 1": "Laboratorium Cyber",
+        "floor 4 room 2": "Laboratorium Akuntansi",
+        "floor 4 room 3": "Laboratorium ML",
+        "floor 4 classroom_401": "Classroom 401",
+        "floor 4 classroom_402": "Classroom 402",
+        "floor 4 classroom_403": "Classroom 403",
+        "floor 4 classroom_404": "Classroom 404",
+        "floor 4 classroom_405": "Classroom 405"
+    }
+}

@@ -72,7 +72,6 @@ class IndoorNavigation:
         print(f"Blocked access point: {blocked_access}")
         
     def dijkstra(self, start, end):
-        # Initialize the priority queue
         queue = [(0, start)]  # (cost, node)
         distances = {node: float('infinity') for node in self.graph}
         distances[start] = 0
@@ -100,13 +99,11 @@ class IndoorNavigation:
             current_node = previous_nodes[current_node]
         path.reverse()
 
-        return path if distances[end] != float('infinity') else None
+        return path, distances[end] if distances[end] != float('infinity') else None
 
     def find_shortest_path(self, start, end):
-        return self.dijkstra(start, end)
+        path, cost = self.dijkstra(start, end)
+        return path, cost
     
 navigation = IndoorNavigation()
 navigation.block_access()
-# Dummy example
-shortest_path = navigation.find_shortest_path('Entrance', 'Classroom 404')
-print("Shortest path:", shortest_path)

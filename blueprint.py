@@ -2,10 +2,15 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib.widgets import Button, CheckButtons
 import random
+import json
 import time
 import tkinter as tk
 from tkinter import messagebox
 
+def load_room_names(file_path):
+    with open(file_path, 'r') as file:
+        data = json.load(file)
+    return data['room_names']
 
 def draw_floor(ax, floor_number, room_names=None, highlight_room=None):
     width, height = 12, 6
@@ -182,7 +187,6 @@ def draw_fourth_floor(ax, floor_number, room_names=None, highlight_room=None):
     ax.text(width / 2, height + 0.5, f"Floor {floor_number}", ha='center', fontsize=12, weight='bold')
     
 #switch floor
-
 def draw_building_with_switching(room_names=None):
     fig, ax = plt.subplots(figsize=(12, 6))
     plt.subplots_adjust(bottom=0.3)
@@ -220,45 +224,9 @@ def draw_building_with_switching(room_names=None):
     btn_prev.on_clicked(lambda event: switch_floor(-1))
     btn_next.on_clicked(lambda event: switch_floor(1))
 
-    # Create a Tkinter window for listboxes
-    root = tk.Tk()
-    root.title("Room Selection")
-
-    # Prepare the room options for the listboxes
-    room_values = list(room_names.values()) if room_names else []
-
-    # Listbox for selecting the start state
-    listbox1_label = tk.Label(root, text="Select Start State:")
-    listbox1_label.pack()
-    listbox1 = tk.Listbox(root, selectmode=tk.SINGLE)
-    for room in room_values:
-        listbox1.insert(tk.END, room)
-    listbox1.pack()
-
-    # Listbox for selecting the goal
-    listbox2_label = tk.Label(root, text="Select Goal State:")
-    listbox2_label.pack()
-    listbox2 = tk.Listbox(root, selectmode=tk.SINGLE)
-    for room in room_values:
-        listbox2.insert(tk.END, room)
-    listbox2.pack()
-
-    # Function to get selected room values
-    def get_selected_rooms():
-        selected_room1 = listbox1.get(listbox1.curselection()) if listbox1.curselection() else None
-        selected_room2 = listbox2.get(listbox2.curselection()) if listbox2.curselection() else None
-        print(f"Selected Start State: {selected_room1}, Selected Goal State: {selected_room2}")
-
-    # Button to print selected rooms
-    btn_show_rooms = tk.Button(root, text='Show Selected Rooms', command=get_selected_rooms)
-    btn_show_rooms.pack()
-
     # Displaying the plot
     update_floor(current_floor[0])
-    
-    # Start the Tkinter main loop
-    plt.show(block=False)
-    root.mainloop()
+    plt.show()
 
 def generate_random_time():
     # Generate random hour and minute
@@ -288,35 +256,6 @@ def display_random_time():
 # Call the function to display the random time in a new window
 display_random_time()
 
- 
-room_names = {
-    'large_room': 'Laboratorium Mac',
-    'floor 1 room 1': 'Laboratorium SI',
-    'floor 1 room 2': 'Laboratorium DKV',
-    'floor 2 room 1': 'Laboratorium Komputer',
-    'floor 2 room 2': 'Laboratorium Basis Data',
-    'floor 2 room 3': 'Laboratorium Elektro',
-    'floor 3 room 1': 'Laboratorium CRC',
-    'floor 3 room 2': 'Laboratorium OLB',
-    'floor 3 room 3': 'Laboratorium IoT',
-    'floor 4 room 1': 'Laboratorium Cyber',
-    'floor 4 room 2': 'Laboratorium Akuntansi',
-    'floor 4 room 3': 'Laboratorium ML',
-    'floor 2 classroom_201': 'Classroom 201',
-    'floor 2 classroom_202': 'Classroom 202',
-    'floor 2 classroom_203': 'Classroom 203',
-    'floor 2 classroom_204': 'Classroom 204',
-    'floor 2 classroom_205': 'Classroom 205',
-    'floor 3 classroom_301': 'Classroom 301',
-    'floor 3 classroom_302': 'Classroom 302',
-    'floor 3 classroom_303': 'Classroom 303',
-    'floor 3 classroom_304': 'Classroom 304',
-    'floor 3 classroom_305': 'Classroom 305',
-    'floor 4 classroom_401': 'Classroom 401',
-    'floor 4 classroom_402': 'Classroom 402',
-    'floor 4 classroom_403': 'Classroom 403',
-    'floor 4 classroom_404': 'Classroom 404',
-    'floor 4 classroom_405': 'Classroom 405'
-}
+room_names = load_room_names('room_names.json')
 
 draw_building_with_switching(room_names=room_names)
