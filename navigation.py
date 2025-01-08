@@ -2,6 +2,15 @@ import heapq
 import random
 
 class IndoorNavigation:
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super(IndoorNavigation, cls).__new__(cls)
+            cls._instance.graph = cls._instance.create_graph()
+            cls._instance.blocked_access = []  # Initialize blocked access points
+        return cls._instance
+    
     def __init__(self):
         self.graph = self.create_graph()
 
@@ -58,18 +67,20 @@ class IndoorNavigation:
         return graph
 
     def block_access(self):
-        access_points = ['Stairs_A_F1', 'Stairs_B_F1', 'Lift_F1', 
-                         'Stairs_A_F2', 'Stairs_B_F2', 'Lift_F2', 
-                         'Stairs_A_F3', 'Stairs_B_F3', 'Lift_F3', 
-                         'Stairs_A_F4', 'Stairs_B_F4', 'Lift_F4']
+        access_points = ['Stairs_A_F1', 'Stairs_B_F1', 
+                         'Stairs_A_F2', 'Stairs_B_F2',
+                         'Stairs_A_F3', 'Stairs_B_F3', 
+                         'Stairs_A_F4', 'Stairs_B_F4',
+                         'Lift_F1', 'Lift_F2', 'Lift_F3', 'Lift_F4'
+                         ]
         blocked_access = random.choice(access_points)
+        self.blocked_access.append(blocked_access)
         
-        # Remove connections for the blocked access point
         for node in self.graph:
             if blocked_access in self.graph[node]:
                 del self.graph[node][blocked_access]
+        return blocked_access
         
-        print(f"Blocked access point: {blocked_access}")
         
     def dijkstra(self, start, end):
         queue = [(0, start)]  # (cost, node)
@@ -104,6 +115,3 @@ class IndoorNavigation:
     def find_shortest_path(self, start, end):
         path, cost = self.dijkstra(start, end)
         return path, cost
-    
-navigation = IndoorNavigation()
-navigation.block_access()

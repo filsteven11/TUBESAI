@@ -9,14 +9,14 @@ def load_room_names(file_path):
     return data['room_names']
 
 class RoomSelectionApp:
-    def __init__(self, master, room_names):
+    def __init__(self, master, room_names, navigation):
         self.master = master
         self.master.title("Room Selection App")
         
         self.room_names = room_names
         self.start_state = None
         self.goal_state = None
-        
+        self.navigation = navigation
         self.start_frame = tk.Frame(self.master)
         self.goal_frame = tk.Frame(self.master)
 
@@ -62,19 +62,23 @@ class RoomSelectionApp:
         if selected:
             self.goal_state = self.goal_listbox.get(selected)
             print(f"Selected Start State: {self.start_state}, Selected Goal State: {self.goal_state}")
-            self.master.quit()  # Close the application after selection
-            
-            # After user selects start and goal states
-            navigation = IndoorNavigation()
-            shortest_path, cost = navigation.find_shortest_path(self.start_state, self.goal_state)
+            self.master.quit()
+
+            # Block access points before finding the shortest path
+            blocked_path = self.navigation.block_access()  # Call block_access first
+            print(f"Blocked access point: {blocked_path}")
+
+            # Now find the shortest path
+            shortest_path, cost = self.navigation.find_shortest_path(self.start_state, self.goal_state)
+
             if shortest_path is not None:
                 print(f"Shortest path from {self.start_state} to {self.goal_state}: {shortest_path} with total cost: {cost}")
-                blueprint.draw_building_with_switching(room_names=room_names)
-                
+                blueprint.draw_building_with_switching(room_names=self.room_names)
             else:
                 print(f"No path found from {self.start_state} to {self.goal_state}.")
 
+navigation = IndoorNavigation()
 room_names = load_room_names('room_names.json')
 root = tk.Tk()
-app = RoomSelectionApp(root, room_names)
+app = RoomSelectionApp(root, room_names, navigation)
 root.mainloop()
