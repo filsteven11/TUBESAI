@@ -104,7 +104,7 @@ class RoomSelectionApp:
             if shortest_path is not None:
                 show_path_popup(self.start_state, self.goal_state, shortest_path, cost, blocked_path)
                 starting_floor = blueprint.get_floor_from_room(self.start_state, room_names)
-                blueprint.draw_building_with_switching(room_names=self.room_names, start_floor=starting_floor, start_room=self.start_state, goal_room=self.goal_state)
+                blueprint.draw_building_with_switching(room_names=self.room_names, start_floor=starting_floor, start_room=self.start_state, goal_room=self.goal_state, path=shortest_path)
             else:
                 print(f"No path found from {self.start_state} to {self.goal_state}.")
 
