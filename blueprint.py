@@ -36,34 +36,42 @@ def draw_floor(ax, floor_number, room_names=None, start_room=None, goal_room=Non
     # Entrance
     entrance_width = 2
     entrance = room_names.get('entrance', 'Entrance') if room_names else 'Entrance'
-    room_color = 'indigo' if entrance == start_room else 'lightcoral' if entrance == goal_room else 'plum' if entrance in path and entrance != start_room and entrance != goal_room else 'khaki'
+    room_color = 'purple' if entrance == start_room else 'lightcoral' if entrance == goal_room else 'plum' if entrance in path and entrance != start_room and entrance != goal_room else 'khaki'
     ax.add_patch(patches.Rectangle((width / 2 - entrance_width / 2, 0), entrance_width, 1, edgecolor='black', facecolor=room_color, lw=2, zorder=1))
     ax.text(width / 2, -0.3, 'Entrance', ha='center', fontsize=12, weight='bold', color='black')
 
     # Stairs
     stair_width = 1
-    ax.add_patch(patches.Rectangle((0, height / 2), stair_width, 1.5, edgecolor='black', facecolor='lightblue', lw=2, zorder=1))
-    ax.add_patch(patches.Rectangle((width - stair_width, height / 2), stair_width, 1.5, edgecolor='black', facecolor='lightblue', lw=2, zorder=1))
+    lsc = rsc = 'lightblue'
+    if 'Left Stairs F1' in path:
+        lsc = 'plum'
+    if 'Right Stairs F1' in path:
+        rsc = 'plum'
+    ax.add_patch(patches.Rectangle((0, height / 2), stair_width, 1.5, edgecolor='black', facecolor=lsc, lw=2, zorder=1))
+    ax.add_patch(patches.Rectangle((width - stair_width, height / 2), stair_width, 1.5, edgecolor='black', facecolor=rsc, lw=2, zorder=1))
     ax.text(0.5, height / 2 + 1.6, 'Stairs', ha='center', fontsize=11, weight='bold', color='black')
     ax.text(width - 0.5, height / 2 + 1.6, 'Stairs', ha='center', fontsize=11, weight='bold', color='black')
 
     # Lift
-    ax.add_patch(patches.Rectangle((stair_width, height / 2), 2, 1.5, edgecolor='black', facecolor='lightgreen', lw=2, zorder=1))
+    lc = 'lightgreen'
+    if 'Lift F1' in path:
+        lc = 'plum'
+    ax.add_patch(patches.Rectangle((stair_width, height / 2), 2, 1.5, edgecolor='black', facecolor=lc, lw=2, zorder=1))
     ax.text(stair_width + 1, height / 2 + 1.6, 'Lift', ha='center', fontsize=11, weight='bold', color='black')
 
     # Rooms and pinpoints
     labmac = room_names.get('floor 1 room 1', 'Laboratorium Mac') if room_names else 'Laboratorium Mac'
-    room_color = 'indigo' if labmac == start_room else 'lightcoral' if labmac == goal_room else 'plum' if labmac in path and labmac != start_room and labmac != goal_room else 'khaki'
+    room_color = 'purple' if labmac == start_room else 'lightcoral' if labmac == goal_room else 'plum' if labmac in path and labmac != start_room and labmac != goal_room else 'khaki'
     ax.add_patch(patches.Rectangle((stair_width + 2, height / 2), room_width, F1R0, edgecolor='black', facecolor=room_color, lw=2, zorder=1))
     ax.text(stair_width + 2 + room_width / 2, height / 2 + F1R0 / 2, labmac, ha='center', va='center', fontsize=12, zorder=2)
 
     labsi = room_names.get('floor 1 room 2', 'Laboratorium SI') if room_names else 'Laboratorium SI'
-    room_color = 'indigo' if labsi == start_room else 'lightcoral' if labsi == goal_room else 'plum' if labsi in path and labsi != start_room and labsi != goal_room else 'khaki'
+    room_color = 'purple' if labsi == start_room else 'lightcoral' if labsi == goal_room else 'plum' if labsi in path and labsi != start_room and labsi != goal_room else 'khaki'
     ax.add_patch(patches.Rectangle((stair_width + 2 + room_width, height / 2), room_width / 2, F1R1, edgecolor='black', facecolor=room_color, lw=2, zorder=1))
     ax.text(stair_width + 2 + room_width + room_width / 4, height / 2 + F1R1 / 2, labsi, ha='center', va='center', fontsize=11, zorder=2)
 
     labdkv = room_names.get('floor 1 room 3', 'Laboratorium DKV') if room_names else 'Laboratorium DKV'
-    room_color = 'indigo' if labdkv == start_room else 'lightcoral' if labdkv == goal_room else 'plum' if labdkv in path and labdkv != start_room and labdkv != goal_room else 'khaki'
+    room_color = 'purple' if labdkv == start_room else 'lightcoral' if labdkv == goal_room else 'plum' if labdkv in path and labdkv != start_room and labdkv != goal_room else 'khaki'
     ax.add_patch(patches.Rectangle((stair_width + 2 + room_width + room_width / 2, height / 2), room_width / 2, F1R2, edgecolor='black', facecolor=room_color, lw=2, zorder=1))
     ax.text(stair_width + 2 + room_width + room_width / 2 + (room_width / 4), height / 2 + F1R2 / 2, labdkv, ha='center', va='center', fontsize=9, zorder=2)
 
@@ -76,19 +84,29 @@ def draw_second_floor(ax, floor_number, room_names=None, start_room=None, goal_r
 
     ax.add_patch(patches.Rectangle((0, 0), width, height, edgecolor='black', facecolor='lightyellow', lw=2, zorder=0))
 
+    # Stairs
     stair_width = 1
-    ax.add_patch(patches.Rectangle((0, height / 2), stair_width, 1.5, edgecolor='black', facecolor='lightblue', lw=2, zorder=1))  # Left stair
-    ax.add_patch(patches.Rectangle((width - stair_width, height / 2), stair_width, 1.5, edgecolor='black', facecolor='lightblue', lw=2, zorder=1))  # Right stair
-    ax.text(0.5, height / 2 + 1.6, 'Stairs', ha='center', fontsize=11, weight='bold', color='black')  # Left stair label
-    ax.text(width - 0.5, height / 2 + 1.6, 'Stairs', ha='center', fontsize=11, weight='bold', color='black')  # Right stair label
+    lsc = rsc = 'lightblue'
+    if 'Left Stairs F2' in path:
+        lsc = 'plum'
+    if 'Right Stairs F2' in path:
+        rsc = 'plum'
+    ax.add_patch(patches.Rectangle((0, height / 2), stair_width, 1.5, edgecolor='black', facecolor=lsc, lw=2, zorder=1))
+    ax.add_patch(patches.Rectangle((width - stair_width, height / 2), stair_width, 1.5, edgecolor='black', facecolor=rsc, lw=2, zorder=1))
+    ax.text(0.5, height / 2 + 1.6, 'Stairs', ha='center', fontsize=11, weight='bold', color='black')
+    ax.text(width - 0.5, height / 2 + 1.6, 'Stairs', ha='center', fontsize=11, weight='bold', color='black')
 
-    ax.add_patch(patches.Rectangle((stair_width, height / 2), 2, 1.5, edgecolor='black', facecolor='lightgreen', lw=2, zorder=1))  # Lift
+    # Lift
+    lc = 'lightgreen'
+    if 'Lift F2' in path:
+        lc = 'plum'
+    ax.add_patch(patches.Rectangle((stair_width, height / 2), 2, 1.5, edgecolor='black', facecolor=lc, lw=2, zorder=1))
     ax.text(stair_width + 1, height / 2 + 1.6, 'Lift', ha='center', fontsize=11, weight='bold', color='black')
 
     # Draw Classrooms and pinpoints
     for i in range(5):
         room_name = room_names.get(f'floor 2 class {i+201}', f'Class {i+201}') if room_names else f'Class {i+201}'
-        room_color = 'indigo' if room_name == start_room else 'lightcoral' if room_name == goal_room else 'plum' if room_name in path and room_name != start_room and room_name != goal_room else 'khaki'
+        room_color = 'purple' if room_name == start_room else 'lightcoral' if room_name == goal_room else 'plum' if room_name in path and room_name != start_room and room_name != goal_room else 'khaki'
         ax.add_patch(patches.Rectangle((stair_width + 2 + i * room_width, height / 2), room_width, room_height, edgecolor='black', facecolor=room_color, lw=2, zorder=1))
         ax.text(stair_width + 2 + i * room_width + room_width / 2, height / 2 + room_height / 2, room_name, ha='center', va='center', fontsize=12, zorder=2)
 
@@ -103,17 +121,17 @@ def draw_second_floor(ax, floor_number, room_names=None, start_room=None, goal_r
     # Draw Lab and pinpoints
     F2R0 = height / 4
     labkom = room_names.get('floor 2 room 1', 'Laboratorium Komputer') if room_names else 'Laboratorium Komputer'
-    room_color = 'indigo' if labkom == start_room else 'lightcoral' if labkom == goal_room else 'plum' if labkom in path and labkom != start_room and labkom != goal_room else 'khaki'
+    room_color = 'purple' if labkom == start_room else 'lightcoral' if labkom == goal_room else 'plum' if labkom in path and labkom != start_room and labkom != goal_room else 'khaki'
     ax.add_patch(patches.Rectangle((wc_width, 0), room_width * 2, F2R0, edgecolor='black', facecolor=room_color, lw=2, zorder=1))
     ax.text(stair_width + 0.75 + room_width / 2, F2R0 / 2, labkom, ha='center', va='center', fontsize=12, zorder=2)
 
     labbasdat = room_names.get('floor 2 room 2', 'Laboratorium Basis Data') if room_names else 'Laboratorium Basis Data'
-    room_color = 'indigo' if labbasdat == start_room else 'lightcoral' if labbasdat == goal_room else 'plum' if labbasdat in path and labbasdat != start_room and labbasdat != goal_room else 'khaki'
+    room_color = 'purple' if labbasdat == start_room else 'lightcoral' if labbasdat == goal_room else 'plum' if labbasdat in path and labbasdat != start_room and labbasdat != goal_room else 'khaki'
     ax.add_patch(patches.Rectangle((wc_width + room_width * 2, 0), room_width * 2, F2R0, edgecolor='black', facecolor=room_color, lw=2, zorder=1))
     ax.text(stair_width + 4 + room_width / 2, F2R0 / 2, labbasdat, ha='center', va='center', fontsize=12, zorder=2)
 
     labelektro = room_names.get('floor 2 room 3', 'Laboratorium Elektro') if room_names else 'Laboratorium Elektro'
-    room_color = 'indigo' if labelektro == start_room else 'lightcoral' if labelektro == goal_room else 'plum' if labelektro in path and labelektro != start_room and labelektro != goal_room else 'khaki'
+    room_color = 'purple' if labelektro == start_room else 'lightcoral' if labelektro == goal_room else 'plum' if labelektro in path and labelektro != start_room and labelektro != goal_room else 'khaki'
     ax.add_patch(patches.Rectangle((wc_width + room_width * 4, 0), room_width * 2.25, F2R0, edgecolor='black', facecolor=room_color, lw=2, zorder=1))
     ax.text(stair_width + 7.5 + room_width / 2, F2R0 / 2, labelektro, ha='center', va='center', fontsize=12, zorder=2)
 
@@ -127,19 +145,29 @@ def draw_third_floor(ax, floor_number, room_names=None, start_room=None, goal_ro
 
     ax.add_patch(patches.Rectangle((0, 0), width, height, edgecolor='black', facecolor='lightyellow', lw=2, zorder=0))
 
+    # Stairs
     stair_width = 1
-    ax.add_patch(patches.Rectangle((0, height / 2), stair_width, 1.5, edgecolor='black', facecolor='lightblue', lw=2, zorder=1))  # Left stair
-    ax.add_patch(patches.Rectangle((width - stair_width, height / 2), stair_width, 1.5, edgecolor='black', facecolor='lightblue', lw=2, zorder=1))  # Right stair
-    ax.text(0.5, height / 2 + 1.6, 'Stairs', ha='center', fontsize=11, weight='bold', color='black')  # Left stair label
-    ax.text(width - 0.5, height / 2 + 1.6, 'Stairs', ha='center', fontsize=11, weight='bold', color='black')  # Right stair label
+    lsc = rsc = 'lightblue'
+    if 'Left Stairs F3' in path:
+        lsc = 'plum'
+    if 'Right Stairs F3' in path:
+        rsc = 'plum'
+    ax.add_patch(patches.Rectangle((0, height / 2), stair_width, 1.5, edgecolor='black', facecolor=lsc, lw=2, zorder=1))
+    ax.add_patch(patches.Rectangle((width - stair_width, height / 2), stair_width, 1.5, edgecolor='black', facecolor=rsc, lw=2, zorder=1))
+    ax.text(0.5, height / 2 + 1.6, 'Stairs', ha='center', fontsize=11, weight='bold', color='black')
+    ax.text(width - 0.5, height / 2 + 1.6, 'Stairs', ha='center', fontsize=11, weight='bold', color='black')
 
-    ax.add_patch(patches.Rectangle((stair_width, height / 2), 2, 1.5, edgecolor='black', facecolor='lightgreen', lw=2, zorder=1))  # Lift
+    # Lift
+    lc = 'lightgreen'
+    if 'Lift F3' in path:
+        lc = 'plum'
+    ax.add_patch(patches.Rectangle((stair_width, height / 2), 2, 1.5, edgecolor='black', facecolor=lc, lw=2, zorder=1))
     ax.text(stair_width + 1, height / 2 + 1.6, 'Lift', ha='center', fontsize=11, weight='bold', color='black')
 
     # Draw Classrooms and pinpoints
     for i in range(5):
         room_name = room_names.get(f'floor 3 class {i+301}', f'Class {i+301}') if room_names else f'Class {i+301}'
-        room_color = 'indigo' if room_name == start_room else 'lightcoral' if room_name == goal_room else 'plum' if room_name in path and room_name != start_room and room_name != goal_room else 'khaki'
+        room_color = 'purple' if room_name == start_room else 'lightcoral' if room_name == goal_room else 'plum' if room_name in path and room_name != start_room and room_name != goal_room else 'khaki'
         ax.add_patch(patches.Rectangle((stair_width + 2 + i * room_width, height / 2), room_width, room_height, edgecolor='black', facecolor=room_color, lw=2, zorder=1))
         ax.text(stair_width + 2 + i * room_width + room_width / 2, height / 2 + room_height / 2, room_name, ha='center', va='center', fontsize=12, zorder=2)
 
@@ -154,17 +182,17 @@ def draw_third_floor(ax, floor_number, room_names=None, start_room=None, goal_ro
     # Draw Labs and pinpoints
     F3R0 = height / 4
     labcrc = room_names.get('floor 3 room 1', 'Laboratorium CRC') if room_names else 'Laboratorium CRC'
-    room_color = 'indigo' if labcrc == start_room else 'lightcoral' if labcrc == goal_room else 'plum' if labcrc in path and labcrc != start_room and labcrc != goal_room else 'khaki'
+    room_color = 'purple' if labcrc == start_room else 'lightcoral' if labcrc == goal_room else 'plum' if labcrc in path and labcrc != start_room and labcrc != goal_room else 'khaki'
     ax.add_patch(patches.Rectangle((wc_width, 0), room_width * 2, F3R0, edgecolor='black', facecolor=room_color, lw=2, zorder=1))
     ax.text(stair_width + 0.75 + room_width / 2, F3R0 / 2, labcrc, ha='center', va='center', fontsize=12, zorder=2)
 
     seminar = room_names.get('floor 3 room 2', 'Ruang Seminar') if room_names else 'Ruang Seminar'
-    room_color = 'indigo' if seminar == start_room else 'lightcoral' if seminar == goal_room else 'plum' if seminar in path and seminar != start_room and seminar != goal_room else 'khaki'
+    room_color = 'purple' if seminar == start_room else 'lightcoral' if seminar == goal_room else 'plum' if seminar in path and seminar != start_room and seminar != goal_room else 'khaki'
     ax.add_patch(patches.Rectangle((wc_width + room_width * 2, 0), room_width * 2, F3R0, edgecolor='black', facecolor=room_color, lw=2, zorder=1))
     ax.text(stair_width + 4 + room_width / 2, F3R0 / 2, seminar, ha='center', va='center', fontsize=12, zorder=2)
 
     labiot = room_names.get('floor 3 room 3', 'Laboratorium IoT') if room_names else 'Laboratorium IoT'
-    room_color = 'indigo' if labiot == start_room else 'lightcoral' if labiot == goal_room else 'plum' if labiot in path and labiot != start_room and labiot != goal_room else 'khaki'
+    room_color = 'purple' if labiot == start_room else 'lightcoral' if labiot == goal_room else 'plum' if labiot in path and labiot != start_room and labiot != goal_room else 'khaki'
     ax.add_patch(patches.Rectangle((wc_width + room_width * 4, 0), room_width * 2.25, F3R0, edgecolor='black', facecolor=room_color, lw=2, zorder=1))
     ax.text(stair_width + 7.5 + room_width / 2, F3R0 / 2, labiot, ha='center', va='center', fontsize=12, zorder=2)
 
@@ -178,19 +206,29 @@ def draw_fourth_floor(ax, floor_number, room_names=None, start_room=None, goal_r
 
     ax.add_patch(patches.Rectangle((0, 0), width, height, edgecolor='black', facecolor='lightyellow', lw=2, zorder=0))
 
+    # Stairs
     stair_width = 1
-    ax.add_patch(patches.Rectangle((0, height / 2), stair_width, 1.5, edgecolor='black', facecolor='lightblue', lw=2, zorder=1))  # Left stair
-    ax.add_patch(patches.Rectangle((width - stair_width, height / 2), stair_width, 1.5, edgecolor='black', facecolor='lightblue', lw=2, zorder=1))  # Right stair
-    ax.text(0.5, height / 2 + 1.6, 'Stairs', ha='center', fontsize=11, weight='bold', color='black')  # Left stair label
-    ax.text(width - 0.5, height / 2 + 1.6, 'Stairs', ha='center', fontsize=11, weight='bold', color='black')  # Right stair label
+    lsc = rsc = 'lightblue'
+    if 'Left Stairs F4' in path:
+        lsc = 'plum'
+    if 'Right Stairs F4' in path:
+        rsc = 'plum'
+    ax.add_patch(patches.Rectangle((0, height / 2), stair_width, 1.5, edgecolor='black', facecolor=lsc, lw=2, zorder=1))
+    ax.add_patch(patches.Rectangle((width - stair_width, height / 2), stair_width, 1.5, edgecolor='black', facecolor=rsc, lw=2, zorder=1))
+    ax.text(0.5, height / 2 + 1.6, 'Stairs', ha='center', fontsize=11, weight='bold', color='black')
+    ax.text(width - 0.5, height / 2 + 1.6, 'Stairs', ha='center', fontsize=11, weight='bold', color='black')
 
-    ax.add_patch(patches.Rectangle((stair_width, height / 2), 2, 1.5, edgecolor='black', facecolor='lightgreen', lw=2, zorder=1))  # Lift
+    # Lift
+    lc = 'lightgreen'
+    if 'Lift F4' in path:
+        lc = 'plum'
+    ax.add_patch(patches.Rectangle((stair_width, height / 2), 2, 1.5, edgecolor='black', facecolor=lc, lw=2, zorder=1))
     ax.text(stair_width + 1, height / 2 + 1.6, 'Lift', ha='center', fontsize=11, weight='bold', color='black')
 
     # Draw Classrooms and pinpoints
     for i in range(5):
         room_name = room_names.get(f'floor 4 class {i+401}', f'Class {i+401}') if room_names else f'Class{i+401}'
-        room_color = 'indigo' if room_name == start_room else 'lightcoral' if room_name == goal_room else 'plum' if room_name in path and room_name != start_room and room_name != goal_room else 'khaki'
+        room_color = 'purple' if room_name == start_room else 'lightcoral' if room_name == goal_room else 'plum' if room_name in path and room_name != start_room and room_name != goal_room else 'khaki'
         ax.add_patch(patches.Rectangle((stair_width + 2 + i * room_width, height / 2), room_width, room_height, edgecolor='black', facecolor=room_color, lw=2, zorder=1))
         ax.text(stair_width + 2 + i * room_width + room_width / 2, height / 2 + room_height / 2, room_name, ha='center', va='center', fontsize=12, zorder=2)
 
@@ -205,17 +243,17 @@ def draw_fourth_floor(ax, floor_number, room_names=None, start_room=None, goal_r
     # Draw Labs and pinpoints
     F4R0 = height / 4
     labcyber = room_names.get('floor 4 room 1', 'Laboratorium Cyber') if room_names else 'Laboratorium Cyber'
-    room_color = 'indigo' if labcyber == start_room else 'lightcoral' if labcyber == goal_room else 'plum' if labcyber in path and labcyber != start_room and labcyber != goal_room else 'khaki'
+    room_color = 'purple' if labcyber == start_room else 'lightcoral' if labcyber == goal_room else 'plum' if labcyber in path and labcyber != start_room and labcyber != goal_room else 'khaki'
     ax.add_patch(patches.Rectangle((wc_width, 0), room_width * 2, F4R0, edgecolor='black', facecolor=room_color, lw=2, zorder=1))
     ax.text(stair_width + 0.75 + room_width / 2, F4R0 / 2, labcyber, ha='center', va='center', fontsize=12, zorder=2)
 
     labakuntansi = room_names.get('floor 4 room 2', 'Laboratorium Akuntansi') if room_names else 'Laboratorium Akuntansi'
-    room_color = 'indigo' if labakuntansi == start_room else 'lightcoral' if labakuntansi == goal_room else 'plum' if labakuntansi in path and labakuntansi != start_room and labakuntansi != goal_room else 'khaki'
+    room_color = 'purple' if labakuntansi == start_room else 'lightcoral' if labakuntansi == goal_room else 'plum' if labakuntansi in path and labakuntansi != start_room and labakuntansi != goal_room else 'khaki'
     ax.add_patch(patches.Rectangle((wc_width + room_width * 2, 0), room_width * 2, F4R0, edgecolor='black', facecolor=room_color, lw=2, zorder=1))
     ax.text(stair_width + 4 + room_width / 2, F4R0 / 2, labakuntansi, ha='center', va='center', fontsize=12, zorder=2)
 
     labml = room_names.get('floor 4 room 3', 'Laboratorium ML') if room_names else 'Laboratorium ML'
-    room_color = 'indigo' if labml == start_room else 'lightcoral' if labml == goal_room else 'plum' if labml in path and labml != start_room and labml != goal_room else 'khaki'
+    room_color = 'purple' if labml == start_room else 'lightcoral' if labml == goal_room else 'plum' if labml in path and labml != start_room and labml != goal_room else 'khaki'
     ax.add_patch(patches.Rectangle((wc_width + room_width * 4, 0), room_width * 2.25, F4R0, edgecolor='black', facecolor=room_color, lw=2, zorder=1))
     ax.text(stair_width + 7.5 + room_width / 2, F4R0 / 2, labml, ha='center', va='center', fontsize=12, zorder=2)
 

@@ -67,50 +67,49 @@ class IndoorNavigation:
         return graph
 
     def block_access(self):
-        access_points = ['Left Stairs F1', 'Right Stairs F1', 
-                         'Left Stairs F2', 'Right Stairs F2',
-                         'Left Stairs F3', 'Right Stairs F3', 
-                         'Left Stairs F4', 'Right Stairs F4',
-                         'Lift F1', 'Lift F2', 'Lift F3', 'Lift F4'
-                         ]
+        access_points = [
+            'Left Stairs F1', 'Right Stairs F1', 
+            'Left Stairs F2', 'Right Stairs F2',
+            'Left Stairs F3', 'Right Stairs F3', 
+            'Left Stairs F4', 'Right Stairs F4',
+            'Lift'
+        ]
+        
         blocked_access = random.choice(access_points)
         self.blocked_access.append(blocked_access)
         
-        for node in self.graph:
-            if blocked_access in self.graph[node]:
-                del self.graph[node][blocked_access]
+        if blocked_access == 'Lift':
+            lifts = ['Lift F1', 'Lift F2', 'Lift F3', 'Lift F4']
+            for node in self.graph:
+                for lift in lifts:
+                    if lift in self.graph[node]:
+                        del self.graph[node][lift]
+        else:
+            for node in self.graph:
+                if blocked_access in self.graph[node]:
+                    del self.graph[node][blocked_access]
+        
         return blocked_access
-        
-        
-    def dijkstra(self, start, end):
-        queue = [(0, start)]  # (cost, node)
-        distances = {node: float('infinity') for node in self.graph}
-        distances[start] = 0
-        previous_nodes = {node: None for node in self.graph}
+    
+    def dijkstra(self, start, goal):
+        priority_queue = [(0, start, [])]
+        visited = set()
 
-        while queue:
-            current_distance, current_node = heapq.heappop(queue)
+        while priority_queue:
+            cost, current_node, path = heapq.heappop(priority_queue)
 
-            if current_distance > distances[current_node]:
+            if current_node == goal:
+                return path + [current_node], cost
+
+            if current_node in visited:
                 continue
+            visited.add(current_node)
 
-            for neighbor, weight in self.graph[current_node].items():
-                distance = current_distance + weight
+            for neighbor, edge_cost in self.graph.get(current_node, {}).items():
+                if neighbor not in visited:
+                    heapq.heappush(priority_queue, (cost + edge_cost, neighbor, path + [current_node]))
 
-                if distance < distances[neighbor]:
-                    distances[neighbor] = distance
-                    previous_nodes[neighbor] = current_node
-                    heapq.heappush(queue, (distance, neighbor))
-
-        # Reconstruct the shortest path
-        path = []
-        current_node = end
-        while current_node is not None:
-            path.append(current_node)
-            current_node = previous_nodes[current_node]
-        path.reverse()
-
-        return path, distances[end] if distances[end] != float('infinity') else None
+        return None, float('inf')
 
     def find_shortest_path(self, start, end):
         path, cost = self.dijkstra(start, end)
