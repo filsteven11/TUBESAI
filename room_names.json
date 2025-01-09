@@ -1,9 +1,9 @@
 {
     "room_names": {
         "entrance": "Entrance",
-        "large_room": "Laboratorium Mac",
-        "floor 1 room 1": "Laboratorium SI",
-        "floor 1 room 2": "Laboratorium DKV",
+        "floor 1 room 1": "Laboratorium Mac",
+        "floor 1 room 2": "Laboratorium SI",
+        "floor 1 room 3": "Laboratorium DKV",
         "floor 2 room 1": "Laboratorium Komputer",
         "floor 2 room 2": "Laboratorium Basis Data",
         "floor 2 room 3": "Laboratorium Elektro",

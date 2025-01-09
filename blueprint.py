@@ -10,7 +10,18 @@ def load_room_names(file_path):
         data = json.load(file)
     return data['room_names']
 
-
+def get_floor_from_room(room_name, room_names):
+    for key, value in room_names.items():
+        if value == room_name:
+            if "floor 1" in key or "entrance" == key:
+                return 1
+            elif "floor 2" in key:
+                return 2
+            elif "floor 3" in key:
+                return 3
+            elif "floor 4" in key:
+                return 4
+    return None
 
 def draw_floor(ax, floor_number, room_names=None):
     width, height = 12, 6
@@ -194,12 +205,12 @@ def draw_fourth_floor(ax, floor_number, room_names=None):
     ax.text(width / 2, height + 0.5, f" Floor {floor_number}", ha='center', fontsize=14, weight='bold', color='black', zorder=3)
 
 # Function to draw the building with floor switching
-def draw_building_with_switching(room_names=None):
+def draw_building_with_switching(room_names=None, start_floor=1):
     # Create figure and axis
     fig, ax = plt.subplots(figsize=(12, 6))
     plt.subplots_adjust(bottom=0.3)
 
-    current_floor = [1]
+    current_floor = [start_floor]
 
     # Function to update the floor display
     def update_floor(floor):
@@ -238,8 +249,6 @@ def draw_building_with_switching(room_names=None):
 
     # Customize button appearance
     for btn in [btn_prev, btn_next]:
-        
-        
         btn.label.set_fontsize(12)
         btn.label.set_color('black')
         btn.label.set_weight('bold')
@@ -251,8 +260,4 @@ def draw_building_with_switching(room_names=None):
     update_floor(current_floor[0])
     plt.show()
 
-# Load room names from JSON file
 room_names = load_room_names('room_names.json')
-
-# Run the function to draw the building with floor switching
-draw_building_with_switching(room_names=room_names)
